@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprende+</title>
+    <link rel="icon" href="A+.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --amber: #F5A623; --amber-dark: #D4891A; --amber-light: #FFF3DC; --yellow-banner: #F7C948;
+            --coral: #FF6B6B; --coral-soft: #FFE0E0;
+            --green: #7ECBA1; --green-soft: #D4F5E3; --green-dark: #4CAF7D; --green-label: #2E7D4F;
+            --lavender: #C4A8D8; --lavender-soft: #EFE0F7;
+            --ctrl: #5B9BD5; --ctrl-dark: #3A7BBF; --ctrl-soft: #DCE9F7; --ctrl-label: #2D5F8A;
+            --warm: #FFF8F0; --dark: #2D2A26; --muted: #6B6560;
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Quicksand', sans-serif; color: var(--dark); overflow-x: hidden; background: var(--warm); min-height: 100vh; }
+
+        .poster-page {
+            width: 100%; min-height: 100vh; display: flex; flex-direction: column;
+            background: linear-gradient(180deg, #FFF8F0 0%, #FFEDD5 50%, #FFF3E0 100%);
+            position: relative;
+        }
+        .poster-page::before {
+            content: ''; position: fixed; inset: 0;
+            background-image: radial-gradient(circle, rgba(245,166,35,0.04) 1px, transparent 1px);
+            background-size: 28px 28px; pointer-events: none; z-index: 0;
+        }
+
+        .poster-header { position: relative; z-index: 2; text-align: center; padding: 48px 24px 12px; }
+        .brand-top { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 20px; animation: fadeDown 0.8s ease both; }
+        .brand-icon {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--amber), var(--yellow-banner));
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            font-size: 20px; color: white; font-weight: 900; font-family: 'Poppins', sans-serif;
+            box-shadow: 0 6px 20px rgba(245,166,35,0.35); transition: transform 0.4s ease;
+        }
+        .brand-icon:hover { transform: rotate(-8deg) scale(1.1); }
+        .brand-name { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 24px; color: var(--dark); }
+
+        .main-title {
+            font-family: 'Poppins', sans-serif; font-size: clamp(28px, 5vw, 52px);
+            font-weight: 900; line-height: 1.15; margin-bottom: 14px;
+            animation: fadeDown 0.8s 0.15s ease both; letter-spacing: -0.5px;
+        }
+        .main-title .word-acompanamos { color: var(--amber-dark); position: relative; display: inline-block; }
+        .main-title .word-acompanamos::after {
+            content: ''; position: absolute; bottom: 4px; left: -4px; right: -4px;
+            height: 12px; background: rgba(245,166,35,0.18); border-radius: 6px; z-index: -1;
+        }
+        .main-title .word-etapa { color: var(--coral); font-style: italic; }
+        @keyframes fadeDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
+
+        .stages-grid {
+            position: relative; z-index: 2; flex: 1;
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 16px; padding: 28px 24px 48px; max-width: 1520px; width: 100%; margin: 0 auto;
+        }
+
+        .stage {
+            position: relative; border-radius: 24px; padding: 24px 18px 22px;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            overflow: hidden; opacity: 0; transform: translateY(40px);
+            width: 240px; flex-shrink: 0;
+        }
+        .stage.visible { opacity: 1; transform: translateY(0); }
+        .stage::before {
+            content: ''; position: absolute; inset: 0; border-radius: 24px;
+            border: 2.5px solid transparent; transition: border-color 0.4s ease; pointer-events: none;
+        }
+        .stage:hover { transform: translateY(-10px) scale(1.02); }
+        .stage:hover::before { border-color: currentColor; }
+
+        .stage--init { background: linear-gradient(180deg, var(--coral-soft) 0%, white 70%); color: var(--coral); }
+        .stage--prim { background: linear-gradient(180deg, var(--green-soft) 0%, white 70%); color: var(--green); }
+        .stage--sec  { background: linear-gradient(180deg, var(--amber-light) 0%, white 70%); color: var(--amber-dark); }
+        .stage--uni  { background: linear-gradient(180deg, var(--lavender-soft) 0%, white 70%); color: #9B7DBF; }
+        .stage--ctrl { background: linear-gradient(180deg, var(--ctrl-soft) 0%, white 70%); color: var(--ctrl); }
+
+        .stage--init:hover { box-shadow: 0 16px 50px rgba(255,107,107,0.18); }
+        .stage--prim:hover { box-shadow: 0 16px 50px rgba(126,203,161,0.18); }
+        .stage--sec:hover  { box-shadow: 0 16px 50px rgba(245,166,35,0.18); }
+        .stage--uni:hover  { box-shadow: 0 16px 50px rgba(196,168,216,0.18); }
+        .stage--ctrl:hover { box-shadow: 0 16px 50px rgba(91,155,213,0.18); }
+
+        .stage-visual {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 18px;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: zoom-in;
+        }
+        .stage:hover .stage-visual { transform: scale(1.02); box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
+
+        .stage--init .stage-visual { background: linear-gradient(150deg, #FFE8E8, #FFDADA, #FFCFCF); }
+        .stage--prim .stage-visual { background: linear-gradient(150deg, #D4F5E3, #C2EED6, #B0E7C9); }
+        .stage--sec  .stage-visual { background: linear-gradient(150deg, #FFF3DC, #FFECC8, #FFE5B4); }
+        .stage--uni  .stage-visual { background: linear-gradient(150deg, #EFE0F7, #E5D4F2, #DBC8ED); }
+        .stage--ctrl .stage-visual { background: linear-gradient(150deg, #E8F0FB, #DCE9F7, #CDDDF0); }
+
+        .zoom-hint {
+            position: absolute; bottom: 10px; right: 10px;
+            width: 28px; height: 28px; border-radius: 7px;
+            background: rgba(255,255,255,0.85); display: flex; align-items: center; justify-content: center;
+            font-size: 12px; opacity: 0; transition: opacity 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); pointer-events: none;
+        }
+        .stage--init .zoom-hint { color: var(--coral); }
+        .stage--prim .zoom-hint { color: var(--green-dark); }
+        .stage--sec  .zoom-hint { color: var(--amber-dark); }
+        .stage--uni  .zoom-hint { color: #9B7DBF; }
+        .stage--ctrl .zoom-hint { color: var(--ctrl-dark); }
+        .stage .stage-visual:hover .zoom-hint { opacity: 1; }
+
+        .stage-age { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 50px; margin-bottom: 8px; }
+        .stage--init .stage-age { background: var(--coral-soft); color: var(--coral); }
+        .stage--prim .stage-age { background: var(--green-soft); color: var(--green-dark); }
+        .stage--sec  .stage-age { background: var(--amber-light); color: var(--amber-dark); }
+        .stage--uni  .stage-age { background: var(--lavender-soft); color: #9B7DBF; }
+        .stage--ctrl .stage-age { background: var(--ctrl-soft); color: var(--ctrl-dark); }
+
+        .vacuum-pulse { animation: vacPulse 1.5s ease-in-out infinite; }
+        @keyframes vacPulse { 0%,100%{opacity:.25;stroke-dashoffset:0} 50%{opacity:1;stroke-dashoffset:4} }
+
+        /* ═══ FOOTER ═══ */
+        footer {
+            background: var(--dark);
+            padding: 0 0 0 0;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 28px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-left {
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+            font-weight: 500;
+        }
+
+        .footer-right {
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .footer-right strong {
+            color: rgba(255,255,255,0.65);
+            font-weight: 700;
+        }
+
+        .footer-divider {
+            width: 100%;
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin-bottom: 24px;
+        }
+
+        .modal-overlay {
+            position:fixed;inset:0;background:rgba(45,42,38,.6);backdrop-filter:blur(8px);
+            z-index:500;display:flex;align-items:center;justify-content:center;
+            padding:24px;opacity:0;pointer-events:none;transition:opacity .35s ease;
+        }
+        .modal-overlay.open{opacity:1;pointer-events:auto}
+        .modal-card--zoom {
+            background:white;border-radius:24px;max-width:900px;width:100%;padding:24px;
+            position:relative;transform:scale(.85) translateY(30px);
+            transition:transform .5s cubic-bezier(.23,1,.32,1);
+            box-shadow:0 30px 100px rgba(0,0,0,.25);max-height:95vh;overflow-y:auto;
+        }
+        .modal-overlay.open .modal-card--zoom{transform:scale(1) translateY(0)}
+        .modal-card--zoom .zoom-svg-wrapper{border-radius:14px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.04)}
+        .modal-card--zoom .zoom-svg-wrapper svg{display:block;width:100%;height:auto}
+        .modal-close {
+            position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;border:none;
+            background:rgba(255,248,240,.95);color:var(--muted);font-size:15px;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;transition:all .2s ease;z-index:10;
+            box-shadow:0 2px 10px rgba(0,0,0,.1);
+        }
+        .modal-close:hover{background:#f0e0e0;color:var(--coral)}
+
+        .toast {
+            position:fixed;bottom:28px;right:28px;background:var(--dark);color:white;
+            padding:15px 26px;border-radius:14px;font-family:'Quicksand',sans-serif;
+            font-weight:600;font-size:14.5px;display:flex;align-items:center;gap:10px;
+            z-index:600;box-shadow:0 10px 40px rgba(0,0,0,.25);
+            transform:translateX(130%);transition:transform .5s cubic-bezier(.23,1,.32,1);
+        }
+        .toast.show{transform:translateX(0)}
+        .toast i{color:var(--amber);font-size:18px}
+
+        .particles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+        .particle{position:absolute;border-radius:50%;opacity:0;animation:particleDrift linear infinite}
+        @keyframes particleDrift{0%{opacity:0;transform:translateY(100vh) rotate(0deg)}10%{opacity:.15}90%{opacity:.15}100%{opacity:0;transform:translateY(-10vh) rotate(360deg)}}
+
+        @media(max-width:1300px){.stage{width:220px;}}
+        @media(max-width:1050px){.stage{width:200px;padding:18px 14px 18px;}.stage-visual{border-radius:14px;margin-bottom:12px;}.stage-age{font-size:11px;padding:3px 10px;}}
+        @media(max-width:780px){.stages-grid{gap:12px;padding:20px 12px 36px;}.stage{width:calc(50% - 8px);max-width:300px;}}
+        @media(max-width:480px){.poster-header{padding:32px 14px 6px;}.brand-icon{width:38px;height:38px;font-size:16px;border-radius:10px;}.brand-name{font-size:18px;}.stages-grid{gap:10px;padding:14px 10px 28px;}.stage{padding:14px 10px 14px;border-radius:16px;}.stage-visual{border-radius:12px;}}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    </style>
+</head>
+<body>
+
+<div class="particles" id="particles" aria-hidden="true"></div>
+
+<div class="poster-page">
+    <header class="poster-header">
+        <div class="brand-top">
+            <div class="brand-icon">A+</div>
+            <span class="brand-name">Aprende+</span>
+        </div>
+        <h1 class="main-title"><span class="word-acompanamos">BRAZO ROBOTICO</span><br>INDUSTRIAL<span class="word-etapa"></span></h1>
+    </header>
+
+    <main class="stages-grid" role="list">
+
+        <!-- ═══ 1. INICIAL ═══ -->
+        <article class="stage stage--init" role="listitem">
+            <div class="stage-visual" id="svg1" tabindex="0" role="button" aria-label="Ampliar diagrama">
+                <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
+                <svg viewBox="0 0 420 400" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                    <line x1="10" y1="310" x2="410" y2="310" stroke="#FFB7B7" stroke-width="1"/>
+                    <line x1="10" y1="313" x2="410" y2="313" stroke="#FFDADA" stroke-width=".5"/>
+                    <line x1="30" y1="310" x2="30" y2="313" stroke="#FFDADA" stroke-width=".4"/><line x1="60" y1="310" x2="60" y2="313" stroke="#FFDADA" stroke-width=".4"/>
+                    <line x1="90" y1="310" x2="90" y2="313" stroke="#FFDADA" stroke-width=".4"/><line x1="120" y1="310" x2="120" y2="313" stroke="#FFDADA" stroke-width=".4"/>
+                    <line x1="150" y1="310" x2="150" y2="313" stroke="#FFDADA" stroke-width=".4"/><line x1="180" y1="310" x2="180" y2="313" stroke="#FFDADA" stroke-width=".4"/>
+                    <line x1="210" y1="310" x2="210" y2="313" stroke="#FFDADA" stroke-width=".4"/><line x1="240" y1="310" x2="240" y2="313" stroke="#FFDADA" stroke-width=".4"/>
+                    <line x1="270" y1="310" x2="270" y2="313" stroke="#FFDADA" stroke-width=".4"/><line x1="300" y1="310" x2="300" y2="313" stroke="#FFDADA" stroke-width=".4"/>
+                    <line x1="330" y1="310" x2="330" y2="313" stroke="#FFDADA" stroke-width=".4"/><line x1="360" y1="310" x2="360" y2="313" stroke="#FFDADA" stroke-width=".4"/>
+                    <line x1="390" y1="310" x2="390" y2="313" stroke="#FFDADA" stroke-width=".4"/>
+                    <rect x="14" y="284" width="18" height="26" rx="1.5" fill="#FFE8E8" stroke="#FFCCCC" stroke-width=".6"/>
+                    <line x1="14" y1="295" x2="32" y2="295" stroke="#FFD4D4" stroke-width=".4"/>
+                    <rect x="34" y="284" width="18" height="26" rx="1.5" fill="#FFE8E8" stroke="#FFCCCC" stroke-width=".6"/>
+                    <line x1="34" y1="295" x2="52" y2="295" stroke="#FFD4D4" stroke-width=".4"/>
+                    <rect x="54" y="284" width="18" height="26" rx="1.5" fill="#FFE8E8" stroke="#FFCCCC" stroke-width=".6"/>
+                    <line x1="54" y1="295" x2="72" y2="295" stroke="#FFD4D4" stroke-width=".4"/>
+                    <rect x="112" y="300" width="40" height="10" rx="2" fill="#FFDADA" stroke="#E07070" stroke-width=".9"/>
+                    <path d="M117,300 L121,274 L143,274 L147,300" fill="#FFDADA" stroke="#E07070" stroke-width=".9" stroke-linejoin="round"/>
+                    <circle cx="132" cy="272" r="19" fill="none" stroke="#FF9999" stroke-width=".5" stroke-dasharray="2,1.5"/>
+                    <ellipse cx="132" cy="272" rx="14" ry="6" fill="none" stroke="#E07070" stroke-width="1"/>
+                    <ellipse cx="132" cy="272" rx="5" ry="2.5" fill="#FFB8B8"/>
+                    <path d="M132,266 A14 6 0 0 1 146,272" fill="none" stroke="#E07070" stroke-width=".5" stroke-dasharray="1.5,1.5"/>
+                    <rect x="126" y="250" width="12" height="18" rx="1.5" fill="#FFDADA" stroke="#E07070" stroke-width=".8"/>
+                    <circle cx="132" cy="246" r="12" fill="none" stroke="#FF9999" stroke-width=".5" stroke-dasharray="2,1.5"/>
+                    <rect x="140" y="238" width="9" height="14" rx="2" fill="#FFD0D0" stroke="#E07070" stroke-width=".5"/>
+                    <line x1="142" y1="242" x2="147" y2="242" stroke="#E07070" stroke-width=".3"/><line x1="142" y1="245" x2="147" y2="245" stroke="#E07070" stroke-width=".3"/><line x1="142" y1="248" x2="147" y2="248" stroke="#E07070" stroke-width=".3"/>
+                    <circle cx="132" cy="246" r="7" fill="#FFB8B8" stroke="#E07070" stroke-width="1"/><circle cx="132" cy="246" r="3" fill="#E07070"/>
+                    <line x1="132" y1="246" x2="228" y2="150" stroke="#E07070" stroke-width="6.5" stroke-linecap="round"/>
+                    <line x1="132" y1="246" x2="228" y2="150" stroke="#FFCCCC" stroke-width="3.8" stroke-linecap="round"/>
+                    <path d="M126,242 L222,148" stroke="#FF9999" stroke-width=".9" stroke-dasharray="2.5,2" fill="none" opacity=".7"/>
+                    <path d="M232,153 L287,190" stroke="#FF9999" stroke-width=".9" stroke-dasharray="2.5,2" fill="none" opacity=".7"/>
+                    <path d="M292,192 L292,218" stroke="#FF9999" stroke-width=".9" stroke-dasharray="2.5,2" fill="none" opacity=".7"/>
+                    <rect x="234" y="142" width="8" height="12" rx="2" fill="#FFD0D0" stroke="#E07070" stroke-width=".5"/>
+                    <circle cx="228" cy="138" r="2.5" fill="none" stroke="#E07070" stroke-width=".6"/><circle cx="228" cy="138" r=".9" fill="#E07070"/>
+                    <circle cx="292" cy="184" r="2.5" fill="none" stroke="#E07070" stroke-width=".6"/><circle cx="292" cy="184" r=".9" fill="#E07070"/>
+                    <circle cx="228" cy="150" r="6.5" fill="#FFB8B8" stroke="#E07070" stroke-width="1"/><circle cx="228" cy="150" r="2.8" fill="#E07070"/>
+                    <line x1="228" y1="150" x2="292" y2="190" stroke="#E07070" stroke-width="5.5" stroke-linecap="round"/>
+                    <line x1="228" y1="150" x2="292" y2="190" stroke="#FFCCCC" stroke-width="3.2" stroke-linecap="round"/>
+                    <circle cx="292" cy="190" r="5.5" fill="#FFB8B8" stroke="#E07070" stroke-width=".9"/><circle cx="292" cy="190" r="2.2" fill="#E07070"/>
+                    <line x1="292" y1="195" x2="292" y2="224" stroke="#E07070" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="292" y1="195" x2="292" y2="224" stroke="#FFCCCC" stroke-width="2.2" stroke-linecap="round"/>
+                    <rect x="283" y="224" width="18" height="10" rx="2.5" fill="#FFDADA" stroke="#E07070" stroke-width=".9"/>
+                    <line x1="288" y1="234" x2="288" y2="250" stroke="#FF9999" stroke-width=".8" stroke-dasharray="1.8,1.8" class="vacuum-pulse"/>
+                    <line x1="292" y1="234" x2="292" y2="253" stroke="#FF9999" stroke-width=".8" stroke-dasharray="1.8,1.8" class="vacuum-pulse" style="animation-delay:.3s"/>
+                    <line x1="296" y1="234" x2="296" y2="250" stroke="#FF9999" stroke-width=".8" stroke-dasharray="1.8,1.8" class="vacuum-pulse" style="animation-delay:.6s"/>
+                    <circle cx="117" cy="272" r="1.5" fill="#E07070"/><line x1="115" y1="272" x2="92" y2="272" stroke="#FF9999" stroke-width=".5"/>
+                    <rect x="16" y="264" width="74" height="15" rx="4" fill="rgba(255,228,228,.92)" stroke="#FFCCCC" stroke-width=".4"/>
+                    <text x="53" y="275" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#C04040">CINTURA (EJE 1)</text>
+                    <circle cx="124" cy="246" r="1.5" fill="#E07070"/><line x1="122" y1="246" x2="92" y2="246" stroke="#FF9999" stroke-width=".5"/>
+                    <rect x="16" y="238" width="74" height="15" rx="4" fill="rgba(255,228,228,.92)" stroke="#FFCCCC" stroke-width=".4"/>
+                    <text x="53" y="249" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#C04040">HOMBRO (EJE 2)</text>
+                    <circle cx="180" cy="198" r="1.5" fill="#E07070"/><line x1="180" y1="196" x2="180" y2="24" stroke="#FF9999" stroke-width=".5"/>
+                    <rect x="118" y="10" width="124" height="14" rx="4" fill="rgba(255,228,228,.92)" stroke="#FFCCCC" stroke-width=".4"/>
+                    <text x="180" y="21" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#C04040">ESLABÓN INFERIOR (BRAZO)</text>
+                    <circle cx="228" cy="143" r="1.5" fill="#E07070"/><line x1="228" y1="141" x2="228" y2="42" stroke="#FF9999" stroke-width=".5"/>
+                    <rect x="197" y="28" width="62" height="14" rx="4" fill="rgba(255,228,228,.92)" stroke="#FFCCCC" stroke-width=".4"/>
+                    <text x="228" y="39" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#C04040">CODO (EJE 3)</text>
+                    <circle cx="260" cy="170" r="1.5" fill="#E07070"/><line x1="260" y1="168" x2="260" y2="62" stroke="#FF9999" stroke-width=".5"/>
+                    <rect x="189" y="48" width="142" height="14" rx="4" fill="rgba(255,228,228,.92)" stroke="#FFCCCC" stroke-width=".4"/>
+                    <text x="260" y="59" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#C04040">ESLABÓN SUPERIOR (ANTEBRAZO)</text>
+                    <circle cx="298" cy="190" r="1.5" fill="#E07070"/><line x1="300" y1="188" x2="316" y2="170" stroke="#FF9999" stroke-width=".5"/>
+                    <rect x="316" y="157" width="96" height="24" rx="4" fill="rgba(255,228,228,.92)" stroke="#FFCCCC" stroke-width=".4"/>
+                    <text x="364" y="169" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#C04040">CONJUNTO DE LA</text>
+                    <text x="364" y="178" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#C04040">MUÑECA (EJE 4)</text>
+                    <circle cx="301" cy="252" r="1.5" fill="#E07070"/><line x1="303" y1="252" x2="316" y2="252" stroke="#FF9999" stroke-width=".5"/>
+                    <rect x="316" y="240" width="96" height="24" rx="4" fill="rgba(255,228,228,.92)" stroke="#FFCCCC" stroke-width=".4"/>
+                    <text x="364" y="252" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#C04040">EFECTOR FINAL /</text>
+                    <text x="364" y="261" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#C04040">GARRA DE VACÍO</text>
+                    <circle cx="218" cy="134" r="7" fill="white" stroke="#E07070" stroke-width=".8"/><text x="218" y="137" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#E07070">1</text>
+                    <circle cx="112" cy="305" r="7" fill="white" stroke="#E07070" stroke-width=".8"/><text x="112" y="308" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#E07070">2</text>
+                    <circle cx="152" cy="272" r="7" fill="white" stroke="#E07070" stroke-width=".8"/><text x="152" y="275" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#E07070">3</text>
+                    <circle cx="150" cy="244" r="7" fill="white" stroke="#E07070" stroke-width=".8"/><text x="150" y="247" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#E07070">4</text>
+                    <circle cx="178" cy="186" r="7" fill="white" stroke="#E07070" stroke-width=".8"/><text x="178" y="189" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#E07070">5</text>
+                    <circle cx="300" cy="210" r="7" fill="white" stroke="#E07070" stroke-width=".8"/><text x="300" y="213" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#E07070">6</text>
+                    <circle cx="283" cy="229" r="7" fill="white" stroke="#E07070" stroke-width=".8"/><text x="283" y="232" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#E07070">7</text>
+                    <circle cx="280" cy="242" r="7" fill="white" stroke="#E07070" stroke-width=".8"/><text x="280" y="245" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#E07070">8</text>
+                    <rect x="10" y="328" width="400" height="64" rx="6" fill="rgba(255,228,228,.85)" stroke="#FFCCCC" stroke-width=".4"/>
+                    <circle cx="22" cy="341" r="5" fill="white" stroke="#E07070" stroke-width=".6"/><text x="22" y="344" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6" font-weight="700" fill="#E07070">1</text><text x="32" y="344" font-family="Poppins,sans-serif" font-size="5.5" font-weight="500" fill="#803030">Encoders de posición</text>
+                    <circle cx="22" cy="356" r="5" fill="white" stroke="#E07070" stroke-width=".6"/><text x="22" y="359" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6" font-weight="700" fill="#E07070">2</text><text x="32" y="359" font-family="Poppins,sans-serif" font-size="5.5" font-weight="500" fill="#803030">Placa de montaje de la base</text>
+                    <circle cx="22" cy="371" r="5" fill="white" stroke="#E07070" stroke-width=".6"/><text x="22" y="374" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6" font-weight="700" fill="#E07070">3</text><text x="32" y="374" font-family="Poppins,sans-serif" font-size="5.5" font-weight="500" fill="#803030">Reductores de armónicos</text>
+                    <circle cx="145" cy="341" r="5" fill="white" stroke="#E07070" stroke-width=".6"/><text x="145" y="344" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6" font-weight="700" fill="#E07070">4</text><text x="155" y="344" font-family="Poppins,sans-serif" font-size="5.5" font-weight="500" fill="#803030">Servomotores</text>
+                    <circle cx="145" cy="356" r="5" fill="white" stroke="#E07070" stroke-width=".6"/><text x="145" y="359" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6" font-weight="700" fill="#E07070">5</text><text x="155" y="359" font-family="Poppins,sans-serif" font-size="5.5" font-weight="500" fill="#803030">Arnés de cables y neumática</text>
+                    <circle cx="145" cy="371" r="5" fill="white" stroke="#E07070" stroke-width=".6"/><text x="145" y="374" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6" font-weight="700" fill="#E07070">6</text><text x="155" y="374" font-family="Poppins,sans-serif" font-size="5.5" font-weight="500" fill="#803030">Eslabón del antebrazo</text>
+                    <circle cx="268" cy="341" r="5" fill="white" stroke="#E07070" stroke-width=".6"/><text x="268" y="344" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6" font-weight="700" fill="#E07070">7</text><text x="278" y="344" font-family="Poppins,sans-serif" font-size="5.5" font-weight="500" fill="#803030">Garra de 5, 6</text>
+                    <circle cx="268" cy="356" r="5" fill="white" stroke="#E07070" stroke-width=".6"/><text x="268" y="359" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6" font-weight="700" fill="#E07070">8</text><text x="278" y="359" font-family="Poppins,sans-serif" font-size="5.5" font-weight="500" fill="#803030">Efector de vacíos</text>
+                </svg>
+            </div>
+            <span class="stage-age">Automatización</span>
+        </article>
+
+        <!-- ═══ 2. PRIMARIA ═══ -->
+        <article class="stage stage--prim" role="listitem">
+            <div class="stage-visual" id="svg2" tabindex="0" role="button" aria-label="Ampliar diagrama">
+                <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
+                <svg viewBox="0 0 300 310" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                    <line x1="10" y1="260" x2="290" y2="260" stroke="#B0E7C9" stroke-width="1"/>
+                    <line x1="10" y1="263" x2="290" y2="263" stroke="#C2EED6" stroke-width=".5"/>
+                    <path d="M108,260 L116,228 L184,228 L192,260 Z" fill="#D4F5E3" stroke="#4CAF7D" stroke-width="1.2" stroke-linejoin="round"/>
+                    <circle cx="150" cy="224" r="9" fill="#B0E7C9" stroke="#4CAF7D" stroke-width="1.2"/><circle cx="150" cy="224" r="4" fill="#4CAF7D"/>
+                    <path d="M150,215 A9 9 0 0 1 159,224" fill="none" stroke="#4CAF7D" stroke-width=".6" stroke-dasharray="2,1.5"/>
+                    <line x1="150" y1="224" x2="218" y2="140" stroke="#4CAF7D" stroke-width="7" stroke-linecap="round"/>
+                    <line x1="150" y1="224" x2="218" y2="140" stroke="#D4F5E3" stroke-width="4" stroke-linecap="round"/>
+                    <circle cx="218" cy="140" r="8" fill="#B0E7C9" stroke="#4CAF7D" stroke-width="1.2"/><circle cx="218" cy="140" r="3.5" fill="#4CAF7D"/>
+                    <line x1="218" y1="140" x2="175" y2="72" stroke="#4CAF7D" stroke-width="6" stroke-linecap="round"/>
+                    <line x1="218" y1="140" x2="175" y2="72" stroke="#D4F5E3" stroke-width="3.2" stroke-linecap="round"/>
+                    <circle cx="175" cy="72" r="6.5" fill="#B0E7C9" stroke="#4CAF7D" stroke-width="1"/><circle cx="175" cy="72" r="2.8" fill="#4CAF7D"/>
+                    <line x1="175" y1="78" x2="175" y2="96" stroke="#4CAF7D" stroke-width="3.5" stroke-linecap="round"/>
+                    <line x1="175" y1="78" x2="175" y2="96" stroke="#D4F5E3" stroke-width="1.8" stroke-linecap="round"/>
+                    <rect x="167" y="96" width="16" height="6" rx="1.5" fill="#B0E7C9" stroke="#4CAF7D" stroke-width=".8"/>
+                    <line x1="169" y1="102" x2="160" y2="124" stroke="#4CAF7D" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="169" y1="102" x2="160" y2="124" stroke="#D4F5E3" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="160" y1="124" x2="163" y2="130" stroke="#4CAF7D" stroke-width="2.5" stroke-linecap="round"/>
+                    <line x1="181" y1="102" x2="190" y2="124" stroke="#4CAF7D" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="181" y1="102" x2="190" y2="124" stroke="#D4F5E3" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="190" y1="124" x2="187" y2="130" stroke="#4CAF7D" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="107" cy="248" r="1.5" fill="#4CAF7D"/><line x1="105" y1="248" x2="78" y2="248" stroke="#7ECBA1" stroke-width=".5"/>
+                    <rect x="6" y="240" width="70" height="15" rx="4" fill="rgba(212,245,227,.92)" stroke="#B0E7C9" stroke-width=".4"/>
+                    <text x="41" y="251" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="600" fill="#2E7D4F">BASE</text>
+                    <circle cx="140" cy="224" r="1.5" fill="#4CAF7D"/><line x1="138" y1="224" x2="78" y2="220" stroke="#7ECBA1" stroke-width=".5"/>
+                    <circle cx="208" cy="140" r="1.5" fill="#4CAF7D"/><line x1="206" y1="140" x2="78" y2="195" stroke="#7ECBA1" stroke-width=".5"/>
+                    <line x1="78" y1="195" x2="78" y2="220" stroke="#7ECBA1" stroke-width=".5"/>
+                    <rect x="6" y="197" width="70" height="22" rx="4" fill="rgba(212,245,227,.92)" stroke="#B0E7C9" stroke-width=".4"/>
+                    <text x="41" y="211" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="600" fill="#2E7D4F">ARTICULACIONES</text>
+                    <circle cx="190" cy="180" r="1.5" fill="#4CAF7D"/><line x1="192" y1="178" x2="222" y2="168" stroke="#7ECBA1" stroke-width=".5"/>
+                    <circle cx="200" cy="105" r="1.5" fill="#4CAF7D"/><line x1="202" y1="103" x2="222" y2="155" stroke="#7ECBA1" stroke-width=".5"/>
+                    <line x1="222" y1="155" x2="222" y2="168" stroke="#7ECBA1" stroke-width=".5"/>
+                    <rect x="222" y="148" width="70" height="22" rx="4" fill="rgba(212,245,227,.92)" stroke="#B0E7C9" stroke-width=".4"/>
+                    <text x="257" y="162" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#2E7D4F">BRAZOS</text>
+                    <text x="257" y="163" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#2E7D4F" dy="8">(ESLABONES)</text>
+                    <circle cx="182" cy="72" r="1.5" fill="#4CAF7D"/><line x1="184" y1="72" x2="222" y2="72" stroke="#7ECBA1" stroke-width=".5"/>
+                    <rect x="222" y="65" width="70" height="15" rx="4" fill="rgba(212,245,227,.92)" stroke="#B0E7C9" stroke-width=".4"/>
+                    <text x="257" y="76" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="600" fill="#2E7D4F">MUÑECA</text>
+                    <circle cx="191" cy="124" r="1.5" fill="#4CAF7D"/><line x1="193" y1="124" x2="222" y2="108" stroke="#7ECBA1" stroke-width=".5"/>
+                    <rect x="222" y="93" width="70" height="30" rx="4" fill="rgba(212,245,227,.92)" stroke="#B0E7C9" stroke-width=".4"/>
+                    <text x="257" y="107" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="600" fill="#2E7D4F">EFECTOR FINAL</text>
+                    <text x="257" y="118" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="600" fill="#2E7D4F">(PINZA)</text>
+                    <text x="150" y="18" text-anchor="middle" font-family="Poppins,sans-serif" font-size="9" font-weight="800" fill="#4CAF7D" letter-spacing="1.5">SISTEMA MECÁNICO</text>
+                    <line x1="90" y1="24" x2="210" y2="24" stroke="#7ECBA1" stroke-width=".5"/>
+                </svg>
+            </div>
+            <span class="stage-age">6 — 12 anos</span>
+        </article>
+
+        <!-- ═══ 3. SECUNDARIA ═══ -->
+        <article class="stage stage--sec" role="listitem">
+            <div class="stage-visual" id="svg3" tabindex="0" role="button" aria-label="Ampliar diagrama">
+                <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
+                <svg viewBox="0 0 300 365" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                    <text x="150" y="18" text-anchor="middle" font-family="Poppins,sans-serif" font-size="9" font-weight="800" fill="#D4891A" letter-spacing="1.2">SISTEMA DE SENSADO</text>
+                    <text x="150" y="30" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6" font-weight="500" fill="#D4891A" opacity=".6">Percepción</text>
+                    <line x1="80" y1="36" x2="220" y2="36" stroke="#FFE5B4" stroke-width=".5"/>
+                    <line x1="50" y1="185" x2="250" y2="185" stroke="#D4891A" stroke-width="1.2"/>
+                    <line x1="50" y1="188" x2="250" y2="188" stroke="#FFE5B4" stroke-width=".4"/>
+                    <line x1="70" y1="185" x2="70" y2="188" stroke="#FFE5B4" stroke-width=".3"/><line x1="90" y1="185" x2="90" y2="188" stroke="#FFE5B4" stroke-width=".3"/><line x1="110" y1="185" x2="110" y2="188" stroke="#FFE5B4" stroke-width=".3"/><line x1="130" y1="185" x2="130" y2="188" stroke="#FFE5B4" stroke-width=".3"/>
+                    <line x1="150" y1="185" x2="150" y2="188" stroke="#FFE5B4" stroke-width=".3"/><line x1="170" y1="185" x2="170" y2="188" stroke="#FFE5B4" stroke-width=".3"/><line x1="190" y1="185" x2="190" y2="188" stroke="#FFE5B4" stroke-width=".3"/>
+                    <line x1="210" y1="185" x2="210" y2="188" stroke="#FFE5B4" stroke-width=".3"/><line x1="230" y1="185" x2="230" y2="188" stroke="#FFE5B4" stroke-width=".3"/>
+                    <rect x="195" y="165" width="22" height="20" rx="2" fill="#FFF3DC" stroke="#D4891A" stroke-width=".7"/>
+                    <line x1="195" y1="175" x2="217" y2="175" stroke="#FFE5B4" stroke-width=".4"/>
+                    <rect x="175" y="100" width="34" height="20" rx="3" fill="#FFF3DC" stroke="#D4891A" stroke-width=".8"/>
+                    <circle cx="192" cy="110" r="5" fill="none" stroke="#D4891A" stroke-width=".6"/>
+                    <circle cx="192" cy="110" r="2" fill="#D4891A"/>
+                    <line x1="192" y1="120" x2="206" y2="165" stroke="#D4891A" stroke-width=".4" stroke-dasharray="2,2" opacity=".6"/>
+                    <rect x="82" y="178" width="22" height="7" rx="2" fill="#FFF3DC" stroke="#D4891A" stroke-width=".7"/>
+                    <line x1="93" y1="178" x2="125" y2="130" stroke="#D4891A" stroke-width="5" stroke-linecap="round"/>
+                    <line x1="93" y1="178" x2="125" y2="130" stroke="#FFE5B4" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="125" cy="130" r="6" fill="#FFF3DC" stroke="#D4891A" stroke-width=".9"/>
+                    <circle cx="125" cy="130" r="2.5" fill="#D4891A"/>
+                    <line x1="125" y1="130" x2="155" y2="95" stroke="#D4891A" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="125" y1="130" x2="155" y2="95" stroke="#FFE5B4" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="155" cy="95" r="5" fill="#FFF3DC" stroke="#D4891A" stroke-width=".8"/>
+                    <circle cx="155" cy="95" r="2" fill="#D4891A"/>
+                    <line x1="155" y1="100" x2="155" y2="115" stroke="#D4891A" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="149" y1="115" x2="143" y2="128" stroke="#D4891A" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="161" y1="115" x2="167" y2="128" stroke="#D4891A" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="210" cy="97" r="7" fill="white" stroke="#D4891A" stroke-width=".7"/>
+                    <text x="210" y="100" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" fill="#D4891A">1</text>
+                    <circle cx="215" cy="155" r="7" fill="white" stroke="#D4891A" stroke-width=".7"/>
+                    <text x="215" y="158" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" fill="#D4891A">2</text>
+                    <circle cx="112" cy="127" r="7" fill="white" stroke="#D4891A" stroke-width=".7"/>
+                    <text x="112" y="130" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" fill="#D4891A">3</text>
+                    <circle cx="140" cy="110" r="7" fill="white" stroke="#D4891A" stroke-width=".7"/>
+                    <text x="140" y="113" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" fill="#D4891A">4</text>
+                    <circle cx="168" cy="105" r="7" fill="white" stroke="#D4891A" stroke-width=".7"/>
+                    <text x="168" y="108" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" fill="#D4891A">5</text>
+                    <line x1="20" y1="200" x2="280" y2="200" stroke="#FFE5B4" stroke-width=".5"/>
+                    <circle cx="22" cy="218" r="7" fill="white" stroke="#D4891A" stroke-width=".6"/>
+                    <text x="22" y="221" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#D4891A">1</text>
+                    <text x="35" y="220" font-family="Poppins,sans-serif" font-size="6" font-weight="600" fill="#8B6914">Cámara de visión 2D</text>
+                    <text x="35" y="228" font-family="Poppins,sans-serif" font-size="5" font-weight="400" fill="#B89040">Detecta el objeto sobre la cinta</text>
+                    <circle cx="22" cy="244" r="7" fill="white" stroke="#D4891A" stroke-width=".6"/>
+                    <text x="22" y="247" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#D4891A">2</text>
+                    <text x="35" y="246" font-family="Poppins,sans-serif" font-size="6" font-weight="600" fill="#8B6914">Identificación de piezas</text>
+                    <text x="35" y="254" font-family="Poppins,sans-serif" font-size="5" font-weight="400" fill="#B89040">Reconoce características</text>
+                    <circle cx="22" cy="270" r="7" fill="white" stroke="#D4891A" stroke-width=".6"/>
+                    <text x="22" y="273" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#D4891A">3</text>
+                    <text x="35" y="272" font-family="Poppins,sans-serif" font-size="6" font-weight="600" fill="#8B6914">Encoder (Sensor posición)</text>
+                    <text x="35" y="280" font-family="Poppins,sans-serif" font-size="5" font-weight="400" fill="#B89040">Mide posición y velocidad</text>
+                    <circle cx="160" cy="218" r="7" fill="white" stroke="#D4891A" stroke-width=".6"/>
+                    <text x="160" y="221" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#D4891A">4</text>
+                    <text x="173" y="220" font-family="Poppins,sans-serif" font-size="6" font-weight="600" fill="#8B6914">Monitoreo pos. y vel.</text>
+                    <text x="173" y="228" font-family="Poppins,sans-serif" font-size="5" font-weight="400" fill="#B89040">Garantiza movimientos precisos</text>
+                    <circle cx="160" cy="244" r="7" fill="white" stroke="#D4891A" stroke-width=".6"/>
+                    <text x="160" y="247" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#D4891A">5</text>
+                    <text x="173" y="246" font-family="Poppins,sans-serif" font-size="6" font-weight="600" fill="#8B6914">Sensor fuerza / torque</text>
+                    <text x="173" y="254" font-family="Poppins,sans-serif" font-size="5" font-weight="400" fill="#B89040">Evita daños o sobreesfuerzos</text>
+                </svg>
+            </div>
+            <span class="stage-age">12 — 16 anos</span>
+        </article>
+
+        <!-- ═══ 4. UNIVERSITARIA ═══ -->
+        <article class="stage stage--uni" role="listitem">
+            <div class="stage-visual" id="svg4" tabindex="0" role="button" aria-label="Ampliar diagrama">
+                <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
+                <svg viewBox="0 0 300 320" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                    <text x="150" y="18" text-anchor="middle" font-family="Poppins,sans-serif" font-size="9" font-weight="800" fill="#9B7DBF" letter-spacing="1.2">SISTEMA DE ACTUACIÓN</text>
+                    <line x1="70" y1="24" x2="230" y2="24" stroke="#D8C8E8" stroke-width=".5"/>
+                    <rect x="30" y="70" width="60" height="80" rx="6" fill="#EFE0F7" stroke="#9B7DBF" stroke-width="1"/>
+                    <line x1="38" y1="82" x2="82" y2="82" stroke="#D0C0E0" stroke-width=".5"/><line x1="38" y1="92" x2="82" y2="92" stroke="#D0C0E0" stroke-width=".5"/>
+                    <line x1="38" y1="102" x2="82" y2="102" stroke="#D0C0E0" stroke-width=".5"/><line x1="38" y1="112" x2="82" y2="112" stroke="#D0C0E0" stroke-width=".5"/>
+                    <line x1="38" y1="122" x2="82" y2="122" stroke="#D0C0E0" stroke-width=".5"/><line x1="38" y1="132" x2="82" y2="132" stroke="#D0C0E0" stroke-width=".5"/>
+                    <line x1="38" y1="142" x2="82" y2="142" stroke="#D0C0E0" stroke-width=".5"/>
+                    <line x1="38" y1="142" x2="82" y2="142" stroke="#D0C0E0" stroke-width=".5"/>
+                    <circle cx="60" cy="110" r="12" fill="white" stroke="#9B7DBF" stroke-width=".7"/>
+                    <circle cx="60" cy="110" r="5" fill="#C4A8D8"/><circle cx="60" cy="110" r="1.5" fill="#9B7DBF"/>
+                    <line x1="95" y1="110" x2="118" y2="110" stroke="#9B7DBF" stroke-width="1.2"/>
+                    <polygon points="116,106 124,110 116,114" fill="#9B7DBF"/>
+                    <circle cx="145" cy="100" r="22" fill="#EFE0F7" stroke="#9B7DBF" stroke-width="1"/>
+                    <circle cx="145" cy="100" r="10" fill="white" stroke="#9B7DBF" stroke-width=".7"/>
+                    <circle cx="145" cy="100" r="4" fill="#C4A8D8"/>
+                    <circle cx="145" cy="120" r="14" fill="none" stroke="#9B7DBF" stroke-width=".7"/>
+                    <circle cx="145" cy="120" r="6" fill="#EFE0F7" stroke="#9B7DBF" stroke-width=".5"/>
+                    <circle cx="145" cy="120" r="2" fill="#C4A8D8"/>
+                    <line x1="145" y1="78" x2="145" y2="80" stroke="#9B7DBF" stroke-width=".5"/>
+                    <line x1="158" y1="85" x2="160" y2="87" stroke="#9B7DBF" stroke-width=".5"/>
+                    <line x1="163" y1="100" x2="165" y2="100" stroke="#9B7DBF" stroke-width=".5"/>
+                    <line x1="158" y1="115" x2="160" y2="113" stroke="#9B7DBF" stroke-width=".5"/>
+                    <line x1="145" y1="122" x2="145" y2="134" stroke="#9B7DBF" stroke-width=".5"/>
+                    <line x1="170" y1="110" x2="193" y2="110" stroke="#9B7DBF" stroke-width="1.2"/>
+                    <polygon points="191,106 199,110 191,114" fill="#9B7DBF"/>
+                    <rect x="200" y="85" width="55" height="50" rx="5" fill="#EFE0F7" stroke="#9B7DBF" stroke-width="1"/>
+                    <rect x="204" y="89" width="47" height="18" rx="3" fill="white" stroke="#C4A8D8" stroke-width=".5"/>
+                    <line x1="227" y1="107" x2="227" y2="128" stroke="#9B7DBF" stroke-width="2.5" stroke-linecap="round"/>
+                    <line x1="227" y1="107" x2="227" y2="128" stroke="#D0C0E0" stroke-width="1.2" stroke-linecap="round"/>
+                    <rect x="220" y="128" width="14" height="5" rx="1.5" fill="#C4A8D8" stroke="#9B7DBF" stroke-width=".5"/>
+                    <circle cx="60" cy="63" r="7" fill="white" stroke="#9B7DBF" stroke-width=".7"/>
+                    <text x="60" y="66" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" fill="#9B7DBF">1</text>
+                    <circle cx="145" cy="68" r="7" fill="white" stroke="#9B7DBF" stroke-width=".7"/>
+                    <text x="145" y="71" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" fill="#9B7DBF">2</text>
+                    <circle cx="255" cy="83" r="7" fill="white" stroke="#9B7DBF" stroke-width=".7"/>
+                    <text x="255" y="86" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" fill="#9B7DBF">3</text>
+                    <line x1="20" y1="165" x2="280" y2="165" stroke="#D8C8E8" stroke-width=".5"/>
+                    <circle cx="22" cy="185" r="7" fill="white" stroke="#9B7DBF" stroke-width=".6"/>
+                    <text x="22" y="188" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#9B7DBF">1</text>
+                    <text x="35" y="187" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#6B4F8A">Motores eléctricos</text>
+                    <circle cx="22" cy="210" r="7" fill="white" stroke="#9B7DBF" stroke-width=".6"/>
+                    <text x="22" y="213" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#9B7DBF">2</text>
+                    <text x="35" y="212" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#6B4F8A">Reductores</text>
+                    <circle cx="22" cy="235" r="7" fill="white" stroke="#9B7DBF" stroke-width=".6"/>
+                    <text x="22" y="238" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#9B7DBF">3</text>
+                    <text x="35" y="237" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#6B4F8A">Actuadores (neumáticos</text>
+                    <text x="35" y="245" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#6B4F8A">o eléctricos)</text>
+                </svg>
+            </div>
+            <span class="stage-age">16+ anos</span>
+        </article>
+
+        <!-- ═══ 5. CONTROL ═══ -->
+        <article class="stage stage--ctrl" role="listitem">
+            <div class="stage-visual" id="svg5" tabindex="0" role="button" aria-label="Ampliar diagrama">
+                <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
+                <svg viewBox="0 0 300 335" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                    <text x="150" y="18" text-anchor="middle" font-family="Poppins,sans-serif" font-size="9" font-weight="800" fill="#3A7BBF" letter-spacing="1.2">SISTEMA DE CONTROL</text>
+                    <text x="150" y="30" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6" font-weight="500" fill="#3A7BBF" opacity=".6">Cerebro del robot</text>
+                    <line x1="70" y1="36" x2="230" y2="36" stroke="#B8D0EA" stroke-width=".5"/>
+                    <rect x="55" y="48" width="190" height="145" rx="4" fill="#DCE9F7" stroke="#3A7BBF" stroke-width="1"/>
+                    <rect x="55" y="48" width="30" height="145" rx="4" fill="#CDDDF0" stroke="#3A7BBF" stroke-width=".7"/>
+                    <rect x="85" y="48" width="160" height="145" rx="0" fill="#E8F0FB" stroke="#B8D0EA" stroke-width=".4"/>
+                    <line x1="63" y1="60" x2="77" y2="60" stroke="#A8C4E0" stroke-width=".4"/><line x1="63" y1="66" x2="77" y2="66" stroke="#A8C4E0" stroke-width=".4"/>
+                    <line x1="63" y1="72" x2="77" y2="72" stroke="#A8C4E0" stroke-width=".4"/><line x1="63" y1="78" x2="77" y2="78" stroke="#A8C4E0" stroke-width=".4"/>
+                    <line x1="63" y1="150" x2="77" y2="150" stroke="#A8C4E0" stroke-width=".4"/><line x1="63" y1="156" x2="77" y2="156" stroke="#A8C4E0" stroke-width=".4"/>
+                    <line x1="63" y1="162" x2="77" y2="162" stroke="#A8C4E0" stroke-width=".4"/><line x1="63" y1="168" x2="77" y2="168" stroke="#A8C4E0" stroke-width=".4"/>
+                    <line x1="63" y1="174" x2="77" y2="174" stroke="#A8C4E0" stroke-width=".4"/>
+                    <rect x="95" y="55" width="65" height="50" rx="4" fill="white" stroke="#3A7BBF" stroke-width=".8"/>
+                    <text x="127" y="72" text-anchor="middle" font-family="Poppins,sans-serif" font-size="9" font-weight="800" fill="#3A7BBF">PLC</text>
+                    <circle cx="105" cy="90" r="3" fill="#5B9BD5"/><circle cx="115" cy="90" r="3" fill="#5B9BD5"/>
+                    <circle cx="135" cy="90" r="3" fill="#A8C4E0"/><circle cx="145" cy="90" r="3" fill="#A8C4E0"/>
+                    <circle cx="105" cy="98" r="3" fill="#5B9BD5"/><circle cx="115" cy="98" r="3" fill="#A8C4E0"/>
+                    <rect x="95" y="115" width="65" height="14" rx="2" fill="white" stroke="#5B9BD5" stroke-width=".5"/>
+                    <line x1="100" y1="119" x2="155" y2="119" stroke="#B8D0EA" stroke-width=".3"/><line x1="100" y1="123" x2="155" y2="123" stroke="#B8D0EA" stroke-width=".3"/><line x1="100" y1="127" x2="155" y2="127" stroke="#B8D0EA" stroke-width=".3"/>
+                    <rect x="95" y="135" width="65" height="14" rx="2" fill="white" stroke="#5B9BD5" stroke-width=".5"/>
+                    <line x1="100" y1="139" x2="155" y2="139" stroke="#B8D0EA" stroke-width=".3"/><line x1="100" y1="143" x2="155" y2="143" stroke="#B8D0EA" stroke-width=".3"/><line x1="100" y1="147" x2="155" y2="147" stroke="#B8D0EA" stroke-width=".3"/>
+                    <rect x="95" y="155" width="65" height="14" rx="2" fill="white" stroke="#5B9BD5" stroke-width=".5"/>
+                    <line x1="100" y1="159" x2="155" y2="159" stroke="#B8D0EA" stroke-width=".3"/><line x1="100" y1="163" x2="155" y2="163" stroke="#B8D0EA" stroke-width=".3"/><line x1="100" y1="167" x2="155" y2="167" stroke="#B8D0EA" stroke-width=".3"/>
+                    <rect x="170" y="55" width="65" height="45" rx="4" fill="white" stroke="#3A7BBF" stroke-width=".6"/>
+                    <text x="202" y="74" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6" font-weight="600" fill="#3A7BBF">POWER</text>
+                    <circle cx="185" cy="88" r="4" fill="none" stroke="#5B9BD5" stroke-width=".6"/><circle cx="185" cy="88" r="1.5" fill="#5B9BD5"/>
+                    <text x="195" y="91" font-family="Poppins,sans-serif" font-size="5" fill="#5B9BD5">ON</text>
+                    <path d="M127,105 L127,115" stroke="#5B9BD5" stroke-width=".8" stroke-dasharray="2,1"/>
+                    <path d="M160,80 L170,80" stroke="#5B9BD5" stroke-width=".8"/>
+                    <path d="M170,100 L160,100" stroke="#5B9BD5" stroke-width=".8"/>
+                    <circle cx="82" cy="55" r="7" fill="white" stroke="#3A7BBF" stroke-width=".7"/>
+                    <text x="82" y="58" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" fill="#3A7BBF">1</text>
+                    <circle cx="160" cy="122" r="7" fill="white" stroke="#3A7BBF" stroke-width=".7"/>
+                    <text x="160" y="125" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" fill="#3A7BBF">2</text>
+                    <circle cx="238" cy="75" r="7" fill="white" stroke="#3A7BBF" stroke-width=".7"/>
+                    <text x="238" y="78" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7.5" font-weight="700" fill="#3A7BBF">3</text>
+                    <line x1="20" y1="202" x2="280" y2="202" stroke="#B8D0EA" stroke-width=".5"/>
+                    <circle cx="22" cy="222" r="7" fill="white" stroke="#3A7BBF" stroke-width=".6"/>
+                    <text x="22" y="225" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#3A7BBF">1</text>
+                    <text x="35" y="224" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#2D5F8A">Controlador (PLC)</text>
+                    <text x="35" y="232" font-family="Poppins,sans-serif" font-size="5" font-weight="400" fill="#5B9BD5">Coordina y controla las acciones</text>
+                    <circle cx="22" cy="252" r="7" fill="white" stroke="#3A7BBF" stroke-width=".6"/>
+                    <text x="22" y="255" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#3A7BBF">2</text>
+                    <text x="35" y="254" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#2D5F8A">Software de programación</text>
+                    <text x="35" y="262" font-family="Poppins,sans-serif" font-size="5" font-weight="400" fill="#5B9BD5">Diseña secuencias de movimiento</text>
+                    <circle cx="22" cy="282" r="7" fill="white" stroke="#3A7BBF" stroke-width=".6"/>
+                    <text x="22" y="285" text-anchor="middle" font-family="Poppins,sans-serif" font-size="7" font-weight="700" fill="#3A7BBF">3</text>
+                    <text x="35" y="284" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#2D5F8A">Tarjetas y módulos electrónicos</text>
+                    <text x="35" y="292" font-family="Poppins,sans-serif" font-size="5" font-weight="400" fill="#5B9BD5">Procesamiento de señales y datos</text>
+                </svg>
+            </div>
+            <span class="stage-age">Control</span>
+        </article>
+
+    </main>
+</div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-divider"></div>
+            <div class="footer-inner">
+                <div class="footer-left">
+                    <span class="footer-text">Desarrollado por APRENDE+</span>
+                </div>
+                <div class="footer-right">
+                    <span class="footer-text footer-text">Alumno: Benitez Dos Santos Diego</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+<div class="modal-overlay" id="zoomOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card--zoom" id="zoomCard">
+        <button class="modal-close" id="zoomClose" aria-label="Cerrar"><i class="fas fa-times"></i></button>
+        <div class="zoom-svg-wrapper" id="zoomSvgWrapper"></div>
+    </div>
+</div>
+
+<div class="toast" id="toast" role="alert" aria-live="polite">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMsg"></span>
+</div>
+
+<script>
+    var stages = document.querySelectorAll('.stage');
+    var stageObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                var idx = Array.prototype.indexOf.call(stages, entry.target);
+                setTimeout(function() { entry.target.classList.add('visible'); }, idx * 100);
+                stageObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    stages.forEach(function(s) { stageObserver.observe(s); });
+
+    var zoomOverlay = document.getElementById('zoomOverlay');
+    var zoomSvgWrapper = document.getElementById('zoomSvgWrapper');
+
+    function openZoom(id) {
+        var src = document.getElementById(id);
+        var svg = src.querySelector('svg');
+        zoomSvgWrapper.innerHTML = '';
+        var clone = svg.cloneNode(true);
+        clone.style.width = '100%';
+        clone.style.height = 'auto';
+        zoomSvgWrapper.appendChild(clone);
+        zoomOverlay.classList.add('open');
+        zoomOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeZoom() {
+        zoomOverlay.classList.remove('open');
+        zoomOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    ['svg1','svg2','svg3','svg4','svg5'].forEach(function(id) {
+        var el = document.getElementById(id);
+        el.addEventListener('click', function() { openZoom(id); });
+        el.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openZoom(id); }
+        });
+    });
+
+    document.getElementById('zoomClose').addEventListener('click', closeZoom);
+    zoomOverlay.addEventListener('click', function(e) { if (e.target === zoomOverlay) closeZoom(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeZoom(); });
+
+    var pContainer = document.getElementById('particles');
+    var pColors = ['#FF9A9E','#A8E6CF','#F5A623','#C4A8D8','#F7C948','#5B9BD5'];
+    for (var i = 0; i < 18; i++) {
+        var p = document.createElement('div');
+        p.className = 'particle';
+        var sz = Math.max(4, Math.random() * 10 + 4);
+        p.style.width = sz + 'px'; p.style.height = sz + 'px';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.background = pColors[Math.floor(Math.random() * pColors.length)];
+        p.style.animationDuration = (Math.random() * 15 + 12) + 's';
+        p.style.animationDelay = (Math.random() * 10) + 's';
+        pContainer.appendChild(p);
+    }
+</script>
+</body>
+</html>
