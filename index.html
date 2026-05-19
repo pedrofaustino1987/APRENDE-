@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aprende+</title>
+    <title>Aprende+ — Brazo Robótico Industrial</title>
     <link rel="icon" href="A+.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -14,6 +14,7 @@
             --green: #7ECBA1; --green-soft: #D4F5E3; --green-dark: #4CAF7D; --green-label: #2E7D4F;
             --lavender: #C4A8D8; --lavender-soft: #EFE0F7;
             --ctrl: #5B9BD5; --ctrl-dark: #3A7BBF; --ctrl-soft: #DCE9F7; --ctrl-label: #2D5F8A;
+            --teal: #4DB6AC; --teal-dark: #00897B; --teal-soft: #E0F2F1; --teal-label: #00695C;
             --warm: #FFF8F0; --dark: #2D2A26; --muted: #6B6560;
         }
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -45,7 +46,7 @@
 
         .main-title {
             font-family: 'Poppins', sans-serif; font-size: clamp(28px, 5vw, 52px);
-            font-weight: 900; line-height: 1.15; margin-bottom: 14px;
+            font-weight: 900; line-height: 1.15; margin-bottom: 8px;
             animation: fadeDown 0.8s 0.15s ease both; letter-spacing: -0.5px;
         }
         .main-title .word-acompanamos { color: var(--amber-dark); position: relative; display: inline-block; }
@@ -53,7 +54,11 @@
             content: ''; position: absolute; bottom: 4px; left: -4px; right: -4px;
             height: 12px; background: rgba(245,166,35,0.18); border-radius: 6px; z-index: -1;
         }
-        .main-title .word-etapa { color: var(--coral); font-style: italic; }
+        .subtitle {
+            font-family: 'Quicksand', sans-serif; font-size: clamp(14px, 2vw, 18px);
+            font-weight: 500; color: var(--muted); margin-bottom: 6px;
+            animation: fadeDown 0.8s 0.3s ease both;
+        }
         @keyframes fadeDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
 
         .stages-grid {
@@ -82,20 +87,18 @@
         .stage--sec  { background: linear-gradient(180deg, var(--amber-light) 0%, white 70%); color: var(--amber-dark); }
         .stage--uni  { background: linear-gradient(180deg, var(--lavender-soft) 0%, white 70%); color: #9B7DBF; }
         .stage--ctrl { background: linear-gradient(180deg, var(--ctrl-soft) 0%, white 70%); color: var(--ctrl); }
+        .stage--loop { background: linear-gradient(180deg, var(--teal-soft) 0%, white 70%); color: var(--teal); }
 
         .stage--init:hover { box-shadow: 0 16px 50px rgba(255,107,107,0.18); }
         .stage--prim:hover { box-shadow: 0 16px 50px rgba(126,203,161,0.18); }
         .stage--sec:hover  { box-shadow: 0 16px 50px rgba(245,166,35,0.18); }
         .stage--uni:hover  { box-shadow: 0 16px 50px rgba(196,168,216,0.18); }
         .stage--ctrl:hover { box-shadow: 0 16px 50px rgba(91,155,213,0.18); }
+        .stage--loop:hover { box-shadow: 0 16px 50px rgba(77,182,172,0.18); }
 
         .stage-visual {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            border-radius: 18px;
-            margin-bottom: 16px;
-            position: relative;
-            overflow: hidden;
+            width: 100%; aspect-ratio: 1 / 1; border-radius: 18px;
+            margin-bottom: 16px; position: relative; overflow: hidden;
             transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             cursor: zoom-in;
         }
@@ -106,6 +109,7 @@
         .stage--sec  .stage-visual { background: linear-gradient(150deg, #FFF3DC, #FFECC8, #FFE5B4); }
         .stage--uni  .stage-visual { background: linear-gradient(150deg, #EFE0F7, #E5D4F2, #DBC8ED); }
         .stage--ctrl .stage-visual { background: linear-gradient(150deg, #E8F0FB, #DCE9F7, #CDDDF0); }
+        .stage--loop .stage-visual { background: linear-gradient(150deg, #E0F2F1, #B2DFDB, #80CBC4); }
 
         .zoom-hint {
             position: absolute; bottom: 10px; right: 10px;
@@ -119,57 +123,55 @@
         .stage--sec  .zoom-hint { color: var(--amber-dark); }
         .stage--uni  .zoom-hint { color: #9B7DBF; }
         .stage--ctrl .zoom-hint { color: var(--ctrl-dark); }
+        .stage--loop .zoom-hint { color: var(--teal-dark); }
         .stage .stage-visual:hover .zoom-hint { opacity: 1; }
 
-        .stage-age { font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 50px; margin-bottom: 8px; }
-        .stage--init .stage-age { background: var(--coral-soft); color: var(--coral); }
-        .stage--prim .stage-age { background: var(--green-soft); color: var(--green-dark); }
-        .stage--sec  .stage-age { background: var(--amber-light); color: var(--amber-dark); }
-        .stage--uni  .stage-age { background: var(--lavender-soft); color: #9B7DBF; }
-        .stage--ctrl .stage-age { background: var(--ctrl-soft); color: var(--ctrl-dark); }
+        .stage-label {
+            font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 700;
+            padding: 5px 16px; border-radius: 50px; margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+        .stage--init .stage-label { background: var(--coral-soft); color: var(--coral); }
+        .stage--prim .stage-label { background: var(--green-soft); color: var(--green-dark); }
+        .stage--sec  .stage-label { background: var(--amber-light); color: var(--amber-dark); }
+        .stage--uni  .stage-label { background: var(--lavender-soft); color: #9B7DBF; }
+        .stage--ctrl .stage-label { background: var(--ctrl-soft); color: var(--ctrl-dark); }
+        .stage--loop .stage-label { background: var(--teal-soft); color: var(--teal-dark); }
+
+        .stage-desc {
+            font-size: 11.5px; font-weight: 500; color: var(--muted); line-height: 1.4;
+            max-width: 200px;
+        }
 
         .vacuum-pulse { animation: vacPulse 1.5s ease-in-out infinite; }
         @keyframes vacPulse { 0%,100%{opacity:.25;stroke-dashoffset:0} 50%{opacity:1;stroke-dashoffset:4} }
 
-        /* ═══ FOOTER ═══ */
         footer {
-            background: var(--dark);
-            padding: 0 0 0 0;
+            background: var(--dark); position: relative; z-index: 2;
         }
-
+        .footer-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.06); }
         .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 28px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            max-width: 1200px; margin: 0 auto; padding: 24px 32px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 12px;
         }
-
         .footer-left {
-            font-size: 13px;
-            color: rgba(255,255,255,0.4);
-            font-weight: 500;
+            font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 500;
+            display: flex; flex-direction: column; gap: 4px;
         }
-
-        .footer-right {
-            font-size: 13px;
-            color: rgba(255,255,255,0.4);
-            font-weight: 500;
-            text-align: right;
+        .footer-left .footer-brand { display: inline-flex; align-items: center; gap: 6px; }
+        .footer-left .footer-brand-icon {
+            width: 22px; height: 22px; border-radius: 6px;
+            background: linear-gradient(135deg, var(--amber), var(--yellow-banner));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 9px; color: white; font-weight: 900; font-family: 'Poppins', sans-serif;
         }
-
-        .footer-right strong {
-            color: rgba(255,255,255,0.65);
-            font-weight: 700;
+        .footer-left .footer-brand-name { font-family: 'Poppins', sans-serif; font-weight: 700; color: rgba(255,255,255,0.6); font-size: 13px; }
+        .footer-dev {
+            font-size: 11px; color: rgba(255,255,255,0.35); padding-left: 28px;
         }
-
-        .footer-divider {
-            width: 100%;
-            height: 1px;
-            background: rgba(255,255,255,0.06);
-            margin-bottom: 24px;
-        }
+        .footer-right { font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 500; text-align: right; }
+        .footer-right strong { color: rgba(255,255,255,0.65); font-weight: 700; }
 
         .modal-overlay {
             position:fixed;inset:0;background:rgba(45,42,38,.6);backdrop-filter:blur(8px);
@@ -193,6 +195,10 @@
             box-shadow:0 2px 10px rgba(0,0,0,.1);
         }
         .modal-close:hover{background:#f0e0e0;color:var(--coral)}
+        .modal-title {
+            font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700;
+            color: var(--dark); margin-bottom: 16px; padding-right: 44px;
+        }
 
         .toast {
             position:fixed;bottom:28px;right:28px;background:var(--dark);color:white;
@@ -209,9 +215,20 @@
         @keyframes particleDrift{0%{opacity:0;transform:translateY(100vh) rotate(0deg)}10%{opacity:.15}90%{opacity:.15}100%{opacity:0;transform:translateY(-10vh) rotate(360deg)}}
 
         @media(max-width:1300px){.stage{width:220px;}}
-        @media(max-width:1050px){.stage{width:200px;padding:18px 14px 18px;}.stage-visual{border-radius:14px;margin-bottom:12px;}.stage-age{font-size:11px;padding:3px 10px;}}
+        @media(max-width:1050px){.stage{width:200px;padding:18px 14px 18px;}.stage-visual{border-radius:14px;margin-bottom:12px;}.stage-label{font-size:11px;padding:3px 10px;}}
         @media(max-width:780px){.stages-grid{gap:12px;padding:20px 12px 36px;}.stage{width:calc(50% - 8px);max-width:300px;}}
-        @media(max-width:480px){.poster-header{padding:32px 14px 6px;}.brand-icon{width:38px;height:38px;font-size:16px;border-radius:10px;}.brand-name{font-size:18px;}.stages-grid{gap:10px;padding:14px 10px 28px;}.stage{padding:14px 10px 14px;border-radius:16px;}.stage-visual{border-radius:12px;}}
+        @media(max-width:480px){
+            .poster-header{padding:32px 14px 6px;}
+            .brand-icon{width:38px;height:38px;font-size:16px;border-radius:10px;}
+            .brand-name{font-size:18px;}
+            .stages-grid{gap:10px;padding:14px 10px 28px;}
+            .stage{padding:14px 10px 14px;border-radius:16px;}
+            .stage-visual{border-radius:12px;}
+            .footer-inner{padding:18px 16px; flex-direction:column; text-align:center; align-items:center;}
+            .footer-left{align-items:center;}
+            .footer-dev{padding-left:0;}
+            .footer-right{text-align:center;}
+        }
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
     </style>
 </head>
@@ -223,16 +240,17 @@
     <header class="poster-header">
         <div class="brand-top">
             <div class="brand-icon">A+</div>
-            <span class="brand-name">Aprende+</span>
+            <span class="brand-name">Aprende+ ©</span>
         </div>
-        <h1 class="main-title"><span class="word-acompanamos">BRAZO ROBOTICO</span><br>INDUSTRIAL<span class="word-etapa"></span></h1>
+        <h1 class="main-title"><span class="word-acompanamos">BRAZO ROBÓTICO</span><br>INDUSTRIAL</h1>
+        <p class="subtitle">6 sistemas clave que lo componen</p>
     </header>
 
     <main class="stages-grid" role="list">
 
-        <!-- ═══ 1. INICIAL ═══ -->
+        <!-- ═══ 1. VISTA GENERAL ═══ -->
         <article class="stage stage--init" role="listitem">
-            <div class="stage-visual" id="svg1" tabindex="0" role="button" aria-label="Ampliar diagrama">
+            <div class="stage-visual" id="svg1" tabindex="0" role="button" aria-label="Ampliar diagrama de vista general">
                 <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
                 <svg viewBox="0 0 420 400" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                     <line x1="10" y1="310" x2="410" y2="310" stroke="#FFB7B7" stroke-width="1"/>
@@ -321,12 +339,13 @@
                     <circle cx="268" cy="356" r="5" fill="white" stroke="#E07070" stroke-width=".6"/><text x="268" y="359" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6" font-weight="700" fill="#E07070">8</text><text x="278" y="359" font-family="Poppins,sans-serif" font-size="5.5" font-weight="500" fill="#803030">Efector de vacíos</text>
                 </svg>
             </div>
-            <span class="stage-age">DESGLOSE DE PARTES</span>
+            <span class="stage-label">Vista General</span>
+            <p class="stage-desc">Componentes y ejes del brazo robótico</p>
         </article>
 
-        <!-- ═══ 2. PRIMARIA ═══ -->
+        <!-- ═══ 2. SISTEMA MECÁNICO ═══ -->
         <article class="stage stage--prim" role="listitem">
-            <div class="stage-visual" id="svg2" tabindex="0" role="button" aria-label="Ampliar diagrama">
+            <div class="stage-visual" id="svg2" tabindex="0" role="button" aria-label="Ampliar diagrama del sistema mecánico">
                 <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
                 <svg viewBox="0 0 300 310" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                     <line x1="10" y1="260" x2="290" y2="260" stroke="#B0E7C9" stroke-width="1"/>
@@ -374,12 +393,13 @@
                     <line x1="90" y1="24" x2="210" y2="24" stroke="#7ECBA1" stroke-width=".5"/>
                 </svg>
             </div>
-            <span class="stage-age">SISTEMA MECANICO</span>
+            <span class="stage-label">Sistema Mecánico</span>
+            <p class="stage-desc">Base, articulaciones, eslabones y efector</p>
         </article>
 
-        <!-- ═══ 3. SECUNDARIA ═══ -->
+        <!-- ═══ 3. SISTEMA DE SENSADO ═══ -->
         <article class="stage stage--sec" role="listitem">
-            <div class="stage-visual" id="svg3" tabindex="0" role="button" aria-label="Ampliar diagrama">
+            <div class="stage-visual" id="svg3" tabindex="0" role="button" aria-label="Ampliar diagrama del sistema de sensado">
                 <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
                 <svg viewBox="0 0 300 365" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                     <text x="150" y="18" text-anchor="middle" font-family="Poppins,sans-serif" font-size="9" font-weight="800" fill="#D4891A" letter-spacing="1.2">SISTEMA DE SENSADO</text>
@@ -441,12 +461,13 @@
                     <text x="173" y="254" font-family="Poppins,sans-serif" font-size="5" font-weight="400" fill="#B89040">Evita daños o sobreesfuerzos</text>
                 </svg>
             </div>
-            <span class="stage-age">SISTEMA DE SENSADO</span>
+            <span class="stage-label">Sistema de Sensado</span>
+            <p class="stage-desc">Cámaras, encoders y sensores de fuerza</p>
         </article>
 
-        <!-- ═══ 4. UNIVERSITARIA ═══ -->
+        <!-- ═══ 4. SISTEMA DE ACTUACIÓN ═══ -->
         <article class="stage stage--uni" role="listitem">
-            <div class="stage-visual" id="svg4" tabindex="0" role="button" aria-label="Ampliar diagrama">
+            <div class="stage-visual" id="svg4" tabindex="0" role="button" aria-label="Ampliar diagrama del sistema de actuación">
                 <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
                 <svg viewBox="0 0 300 320" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                     <text x="150" y="18" text-anchor="middle" font-family="Poppins,sans-serif" font-size="9" font-weight="800" fill="#9B7DBF" letter-spacing="1.2">SISTEMA DE ACTUACIÓN</text>
@@ -455,7 +476,6 @@
                     <line x1="38" y1="82" x2="82" y2="82" stroke="#D0C0E0" stroke-width=".5"/><line x1="38" y1="92" x2="82" y2="92" stroke="#D0C0E0" stroke-width=".5"/>
                     <line x1="38" y1="102" x2="82" y2="102" stroke="#D0C0E0" stroke-width=".5"/><line x1="38" y1="112" x2="82" y2="112" stroke="#D0C0E0" stroke-width=".5"/>
                     <line x1="38" y1="122" x2="82" y2="122" stroke="#D0C0E0" stroke-width=".5"/><line x1="38" y1="132" x2="82" y2="132" stroke="#D0C0E0" stroke-width=".5"/>
-                    <line x1="38" y1="142" x2="82" y2="142" stroke="#D0C0E0" stroke-width=".5"/>
                     <line x1="38" y1="142" x2="82" y2="142" stroke="#D0C0E0" stroke-width=".5"/>
                     <circle cx="60" cy="110" r="12" fill="white" stroke="#9B7DBF" stroke-width=".7"/>
                     <circle cx="60" cy="110" r="5" fill="#C4A8D8"/><circle cx="60" cy="110" r="1.5" fill="#9B7DBF"/>
@@ -498,12 +518,13 @@
                     <text x="35" y="245" font-family="Poppins,sans-serif" font-size="6.5" font-weight="600" fill="#6B4F8A">o eléctricos)</text>
                 </svg>
             </div>
-            <span class="stage-age">SISTEMA DE ACTUACION</span>
+            <span class="stage-label">Sistema de Actuación</span>
+            <p class="stage-desc">Motores, reductores y actuadores</p>
         </article>
 
-        <!-- ═══ 5. CONTROL ═══ -->
+        <!-- ═══ 5. SISTEMA DE CONTROL ═══ -->
         <article class="stage stage--ctrl" role="listitem">
-            <div class="stage-visual" id="svg5" tabindex="0" role="button" aria-label="Ampliar diagrama">
+            <div class="stage-visual" id="svg5" tabindex="0" role="button" aria-label="Ampliar diagrama del sistema de control">
                 <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
                 <svg viewBox="0 0 300 335" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                     <text x="150" y="18" text-anchor="middle" font-family="Poppins,sans-serif" font-size="9" font-weight="800" fill="#3A7BBF" letter-spacing="1.2">SISTEMA DE CONTROL</text>
@@ -556,46 +577,147 @@
                     <text x="35" y="292" font-family="Poppins,sans-serif" font-size="5" font-weight="400" fill="#5B9BD5">Procesamiento de señales y datos</text>
                 </svg>
             </div>
-            <span class="stage-age">SISTEMA DE CONTROL</span>
+            <span class="stage-label">Sistema de Control</span>
+            <p class="stage-desc">PLC, software y módulos electrónicos</p>
+        </article>
+
+        <!-- ═══ 6. ESQUEMA DE CONTROL EN LAZO CERRADO ═══ -->
+        <article class="stage stage--loop" role="listitem">
+            <div class="stage-visual" id="svg6" tabindex="0" role="button" aria-label="Ampliar diagrama del esquema de control en lazo cerrado">
+                <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
+                <svg viewBox="0 0 300 370" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+                    <text x="150" y="16" text-anchor="middle" font-family="Poppins,sans-serif" font-size="8.5" font-weight="800" fill="#00897B" letter-spacing="1.2">ESQUEMA DE CONTROL</text>
+                    <text x="150" y="27" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5.5" font-weight="500" fill="#00897B" opacity=".6">Lazo cerrado — Aplicación: envasado Yerba Mate</text>
+                    <line x1="40" y1="33" x2="260" y2="33" stroke="#80CBC4" stroke-width=".4"/>
+                    <rect x="6" y="64" width="62" height="50" rx="5" fill="#E0F2F1" stroke="#4DB6AC" stroke-width="1.2"/>
+                    <text x="37" y="82" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">Control</text>
+                    <text x="37" y="90" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">alto nivel</text>
+                    <text x="37" y="102" text-anchor="middle" font-family="Poppins,sans-serif" font-size="3.5" font-weight="400" fill="#4DB6AC">Planificación</text>
+                    <text x="37" y="107" text-anchor="middle" font-family="Poppins,sans-serif" font-size="3.5" font-weight="400" fill="#4DB6AC">de tarea</text>
+                    <line x1="68" y1="89" x2="88" y2="89" stroke="#00897B" stroke-width=".9"/>
+                    <polygon points="86,86 92,89 86,92" fill="#00897B"/>
+                    <rect x="70" y="74" width="22" height="9" rx="2" fill="rgba(224,242,241,.9)" stroke="#80CBC4" stroke-width=".3"/>
+                    <text x="81" y="80" text-anchor="middle" font-family="Poppins,sans-serif" font-size="3.5" font-weight="600" fill="#00695C">Señal ref.</text>
+                    <rect x="92" y="48" width="100" height="82" rx="5" fill="rgba(224,242,241,.5)" stroke="#4DB6AC" stroke-width="1"/>
+                    <text x="142" y="59" text-anchor="middle" font-family="Poppins,sans-serif" font-size="4" font-weight="600" fill="#00695C">Sistema de actuación</text>
+                    <rect x="100" y="64" width="84" height="44" rx="4" fill="white" stroke="#4DB6AC" stroke-width=".9"/>
+                    <text x="142" y="82" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">Control</text>
+                    <text x="142" y="90" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">bajo nivel</text>
+                    <text x="142" y="101" text-anchor="middle" font-family="Poppins,sans-serif" font-size="3.5" font-weight="400" fill="#4DB6AC">PID por articulación</text>
+                    <line x1="192" y1="89" x2="208" y2="89" stroke="#00897B" stroke-width=".9"/>
+                    <polygon points="206,86 212,89 206,92" fill="#00897B"/>
+                    <rect x="192" y="74" width="22" height="9" rx="2" fill="rgba(224,242,241,.9)" stroke="#80CBC4" stroke-width=".3"/>
+                    <text x="203" y="80" text-anchor="middle" font-family="Poppins,sans-serif" font-size="3.5" font-weight="600" fill="#00695C">Señal ctrl.</text>
+                    <rect x="212" y="58" width="80" height="62" rx="5" fill="#E0F2F1" stroke="#4DB6AC" stroke-width="1.2"/>
+                    <line x1="220" y1="96" x2="284" y2="96" stroke="#4DB6AC" stroke-width=".8"/>
+                    <line x1="220" y1="99" x2="284" y2="99" stroke="#80CBC4" stroke-width=".3"/>
+                    <rect x="224" y="86" width="12" height="10" rx="1.5" fill="white" stroke="#4DB6AC" stroke-width=".6"/>
+                    <text x="230" y="93" text-anchor="middle" font-family="Poppins,sans-serif" font-size="3" font-weight="600" fill="#00695C">YM</text>
+                    <rect x="240" y="86" width="12" height="10" rx="1.5" fill="white" stroke="#4DB6AC" stroke-width=".6"/>
+                    <text x="246" y="93" text-anchor="middle" font-family="Poppins,sans-serif" font-size="3" font-weight="600" fill="#00695C">YM</text>
+                    <rect x="256" y="86" width="12" height="10" rx="1.5" fill="white" stroke="#4DB6AC" stroke-width=".6"/>
+                    <text x="262" y="93" text-anchor="middle" font-family="Poppins,sans-serif" font-size="3" font-weight="600" fill="#00695C">YM</text>
+                    <rect x="272" y="82" width="14" height="14" rx="1" fill="rgba(224,242,241,.8)" stroke="#4DB6AC" stroke-width=".6"/>
+                    <line x1="252" y1="68" x2="246" y2="80" stroke="#4DB6AC" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="246" y1="80" x2="242" y2="86" stroke="#4DB6AC" stroke-width="1" stroke-linecap="round"/>
+                    <circle cx="252" cy="68" r="2" fill="#4DB6AC"/>
+                    <circle cx="246" cy="80" r="1.5" fill="#4DB6AC"/>
+                    <text x="252" y="65" text-anchor="middle" font-family="Poppins,sans-serif" font-size="4" font-weight="600" fill="#00695C">Entorno</text>
+                    <path d="M142,130 L142,152 L37,152 L37,114" stroke="#00897B" stroke-width=".8" stroke-dasharray="3,1.5" fill="none"/>
+                    <polygon points="34,114 37,108 40,114" fill="#00897B"/>
+                    <rect x="62" y="146" width="60" height="10" rx="2" fill="rgba(224,242,241,.92)" stroke="#80CBC4" stroke-width=".3"/>
+                    <text x="92" y="153" text-anchor="middle" font-family="Poppins,sans-serif" font-size="3.8" font-weight="600" fill="#00695C">Retro. propioceptiva</text>
+                    <path d="M252,120 L252,172 L6,172 L6,89" stroke="#00897B" stroke-width=".8" stroke-dasharray="3,1.5" fill="none"/>
+                    <polygon points="3,89 6,83 9,89" fill="#00897B"/>
+                    <rect x="95" y="166" width="62" height="10" rx="2" fill="rgba(224,242,241,.92)" stroke="#80CBC4" stroke-width=".3"/>
+                    <text x="126" y="173" text-anchor="middle" font-family="Poppins,sans-serif" font-size="3.8" font-weight="600" fill="#00695C">Retro. exteroceptiva</text>
+                    <line x1="10" y1="192" x2="290" y2="192" stroke="#80CBC4" stroke-width=".4"/>
+                    <rect x="6" y="200" width="288" height="162" rx="5" fill="rgba(224,242,241,.6)" stroke="#80CBC4" stroke-width=".3"/>
+                    <text x="150" y="214" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6" font-weight="800" fill="#00897B" letter-spacing="1">APLICACIÓN: ENVASADO YERBA MATE 500g</text>
+                    <circle cx="18" cy="232" r="6" fill="white" stroke="#4DB6AC" stroke-width=".6"/>
+                    <text x="18" y="235" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5.5" font-weight="700" fill="#00897B">1</text>
+                    <text x="30" y="231" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">Control alto nivel</text>
+                    <text x="30" y="238" font-family="Poppins,sans-serif" font-size="4" font-weight="400" fill="#4DB6AC">Planifica: "Recoger paquete, colocar en caja"</text>
+                    <circle cx="18" cy="254" r="6" fill="white" stroke="#4DB6AC" stroke-width=".6"/>
+                    <text x="18" y="257" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5.5" font-weight="700" fill="#00897B">2</text>
+                    <text x="30" y="253" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">Señal de referencia</text>
+                    <text x="30" y="260" font-family="Poppins,sans-serif" font-size="4" font-weight="400" fill="#4DB6AC">Posición objetivo del efector sobre el paquete</text>
+                    <circle cx="18" cy="276" r="6" fill="white" stroke="#4DB6AC" stroke-width=".6"/>
+                    <text x="18" y="279" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5.5" font-weight="700" fill="#00897B">3</text>
+                    <text x="30" y="275" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">Control bajo nivel</text>
+                    <text x="30" y="282" font-family="Poppins,sans-serif" font-size="4" font-weight="400" fill="#4DB6AC">Control PID de cada articulación (hombro, codo, muñeca)</text>
+                    <circle cx="18" cy="298" r="6" fill="white" stroke="#4DB6AC" stroke-width=".6"/>
+                    <text x="18" y="301" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5.5" font-weight="700" fill="#00897B">4</text>
+                    <text x="30" y="297" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">Entorno</text>
+                    <text x="30" y="304" font-family="Poppins,sans-serif" font-size="4" font-weight="400" fill="#4DB6AC">Cinta transportadora con paquetes + cajas de envío</text>
+                    <circle cx="18" cy="320" r="6" fill="white" stroke="#4DB6AC" stroke-width=".6"/>
+                    <text x="18" y="323" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5.5" font-weight="700" fill="#00897B">5</text>
+                    <text x="30" y="319" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">Retro. propioceptiva</text>
+                    <text x="30" y="326" font-family="Poppins,sans-serif" font-size="4" font-weight="400" fill="#4DB6AC">Encoders informan ángulo real de cada articulación</text>
+                    <circle cx="18" cy="342" r="6" fill="white" stroke="#4DB6AC" stroke-width=".6"/>
+                    <text x="18" y="345" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5.5" font-weight="700" fill="#00897B">6</text>
+                    <text x="30" y="341" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">Retro. exteroceptiva</text>
+                    <text x="30" y="348" font-family="Poppins,sans-serif" font-size="4" font-weight="400" fill="#4DB6AC">Cámara 2D detecta posición del paquete en cinta</text>
+                    <rect x="248" y="224" width="36" height="18" rx="2" fill="#FFF8E1" stroke="#F9A825" stroke-width=".5"/>
+                    <text x="266" y="234" text-anchor="middle" font-family="Poppins,sans-serif" font-size="3.5" font-weight="700" fill="#E65100">⚠ PELIGRO</text>
+                    <text x="266" y="239" text-anchor="middle" font-family="Poppins,sans-serif" font-size="2.5" font-weight="500" fill="#F9A825">ROBOT EN MOV.</text>
+                </svg>
+            </div>
+            <span class="stage-label">Esquema de Control</span>
+            <p class="stage-desc">Lazo cerrado aplicado al envasado de Yerba Mate</p>
         </article>
 
     </main>
 </div>
 
-    <!-- ═══ FOOTER ═══ -->
-    <footer>
-        <div class="footer-inner">
-            <div class="footer-divider"></div>
-            <div class="footer-inner">
-                <div class="footer-left">
-                    <span class="footer-text">Desarrollado por APRENDE+</span>
-                </div>
-                <div class="footer-right">
-                    <span class="footer-text footer-text">Alumno: Benitez Dos Santos Diego</span>
-                </div>
-            </div>
+<!-- ═══ FOOTER ═══ -->
+<footer>
+    <div class="footer-divider"></div>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <span class="footer-brand">
+                <span class="footer-brand-icon">A+</span>
+                <span class="footer-brand-name">Aprende+©</span>
+            </span>
+            <span class="footer-dev">Desarrollado por Benitez Franco Pedro</span>
         </div>
-    </footer>
+        <div class="footer-right">
+            Alumno: <strong>Benitez Dos Santos Diego</strong>
+        </div>
+    </div>
+</footer>
 
+<!-- ═══ MODAL ZOOM ═══ -->
 <div class="modal-overlay" id="zoomOverlay" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-card--zoom" id="zoomCard">
         <button class="modal-close" id="zoomClose" aria-label="Cerrar"><i class="fas fa-times"></i></button>
+        <div class="modal-title" id="zoomTitle"></div>
         <div class="zoom-svg-wrapper" id="zoomSvgWrapper"></div>
     </div>
 </div>
 
+<!-- ═══ TOAST ═══ -->
 <div class="toast" id="toast" role="alert" aria-live="polite">
     <i class="fas fa-check-circle"></i>
     <span id="toastMsg"></span>
 </div>
 
 <script>
+    var stageData = {
+        svg1: { title: 'Vista General — Componentes y Ejes' },
+        svg2: { title: 'Sistema Mecánico — Articulaciones y Eslabones' },
+        svg3: { title: 'Sistema de Sensado — Percepción del Robot' },
+        svg4: { title: 'Sistema de Actuación — Motores y Reductores' },
+        svg5: { title: 'Sistema de Control — PLC y Electrónica' },
+        svg6: { title: 'Esquema de Control — Lazo Cerrado (Envasado Yerba Mate)' }
+    };
+
     var stages = document.querySelectorAll('.stage');
     var stageObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
             if (entry.isIntersecting) {
                 var idx = Array.prototype.indexOf.call(stages, entry.target);
-                setTimeout(function() { entry.target.classList.add('visible'); }, idx * 100);
+                setTimeout(function() { entry.target.classList.add('visible'); }, idx * 120);
                 stageObserver.unobserve(entry.target);
             }
         });
@@ -604,6 +726,7 @@
 
     var zoomOverlay = document.getElementById('zoomOverlay');
     var zoomSvgWrapper = document.getElementById('zoomSvgWrapper');
+    var zoomTitle = document.getElementById('zoomTitle');
 
     function openZoom(id) {
         var src = document.getElementById(id);
@@ -613,9 +736,11 @@
         clone.style.width = '100%';
         clone.style.height = 'auto';
         zoomSvgWrapper.appendChild(clone);
+        zoomTitle.textContent = stageData[id].title;
         zoomOverlay.classList.add('open');
         zoomOverlay.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
+        showToast('Diagrama ampliado — usa scroll para ver detalles');
     }
 
     function closeZoom() {
@@ -624,7 +749,7 @@
         document.body.style.overflow = '';
     }
 
-    ['svg1','svg2','svg3','svg4','svg5'].forEach(function(id) {
+    ['svg1','svg2','svg3','svg4','svg5','svg6'].forEach(function(id) {
         var el = document.getElementById(id);
         el.addEventListener('click', function() { openZoom(id); });
         el.addEventListener('keydown', function(e) {
@@ -636,8 +761,21 @@
     zoomOverlay.addEventListener('click', function(e) { if (e.target === zoomOverlay) closeZoom(); });
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeZoom(); });
 
+    var toastEl = document.getElementById('toast');
+    var toastMsg = document.getElementById('toastMsg');
+    var toastTimer = null;
+
+    function showToast(msg) {
+        toastMsg.textContent = msg;
+        toastEl.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function() {
+            toastEl.classList.remove('show');
+        }, 3000);
+    }
+
     var pContainer = document.getElementById('particles');
-    var pColors = ['#FF9A9E','#A8E6CF','#F5A623','#C4A8D8','#F7C948','#5B9BD5'];
+    var pColors = ['#FF9A9E','#A8E6CF','#F5A623','#C4A8D8','#F7C948','#5B9BD5','#4DB6AC'];
     for (var i = 0; i < 18; i++) {
         var p = document.createElement('div');
         p.className = 'particle';
