@@ -141,19 +141,38 @@
         .stage--loop .info-hint { color: var(--teal-dark); }
         .stage .stage-visual:hover .info-hint { opacity: 1; }
 
+        /* ═══ LABEL & DESC MODIFICATIONS ═══ */
         .stage-label {
             font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 700;
             padding: 5px 16px; border-radius: 50px; margin-bottom: 8px;
             letter-spacing: 0.3px;
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: scale(1);
         }
+        .stage-desc {
+            font-size: 12px; font-weight: 500; line-height: 1.5; color: var(--muted);
+            max-height: 0; opacity: 0; overflow: hidden; margin-top: 0;
+            transform: scale(0.9);
+            transition: max-height 0.5s ease, opacity 0.4s ease, transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), margin-top 0.4s ease;
+        }
+
+        /* Effect when in the middle of the screen */
+        .stage.centered .stage-label {
+            transform: scale(1.2); /* Agranda el label un 20% */
+        }
+        .stage.centered .stage-desc {
+            max-height: 120px; /* Permite que el texto se muestre */
+            opacity: 1;
+            transform: scale(1.05); /* Agranda la descripción un 5% */
+            margin-top: 8px; /* Agrega espacio debajo del label */
+        }
+
         .stage--init .stage-label { background: var(--coral-soft); color: var(--coral); }
         .stage--prim .stage-label { background: var(--green-soft); color: var(--green-dark); }
         .stage--sec  .stage-label { background: var(--amber-light); color: var(--amber-dark); }
         .stage--uni  .stage-label { background: var(--lavender-soft); color: #9B7DBF; }
         .stage--ctrl .stage-label { background: var(--ctrl-soft); color: var(--ctrl-dark); }
         .stage--loop .stage-label { background: var(--teal-soft); color: var(--teal-dark); }
-
-        .stage-desc { display: none; }
 
         .vacuum-pulse { animation: vacPulse 1.5s ease-in-out infinite; }
         @keyframes vacPulse { 0%,100%{opacity:.25;stroke-dashoffset:0} 50%{opacity:1;stroke-dashoffset:4} }
@@ -894,6 +913,22 @@
         });
     }, { threshold: 0.1 });
     stages.forEach(function(s) { stageObserver.observe(s); });
+
+    /* ═══ Center Observer ═══ */
+    var centerObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('centered');
+            } else {
+                entry.target.classList.remove('centered');
+            }
+        });
+    }, {
+        rootMargin: "-45% 0px -45% 0px", /* Detecta cuando está en el 10% central de la pantalla */
+        threshold: 0
+    });
+    stages.forEach(function(s) { centerObserver.observe(s); });
+
 
     /* ═══ Desc Float ═══ */
     var descFloat = document.getElementById('descFloat');
