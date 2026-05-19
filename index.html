@@ -100,7 +100,7 @@
             width: 100%; aspect-ratio: 1 / 1; border-radius: 18px;
             margin-bottom: 16px; position: relative; overflow: hidden;
             transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            cursor: zoom-in;
+            cursor: pointer;
         }
         .stage:hover .stage-visual { transform: scale(1.02); box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
 
@@ -116,7 +116,7 @@
             width: 28px; height: 28px; border-radius: 7px;
             background: rgba(255,255,255,0.85); display: flex; align-items: center; justify-content: center;
             font-size: 12px; opacity: 0; transition: opacity 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08); pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); pointer-events: auto; cursor: zoom-in; z-index: 5;
         }
         .stage--init .zoom-hint { color: var(--coral); }
         .stage--prim .zoom-hint { color: var(--green-dark); }
@@ -126,9 +126,24 @@
         .stage--loop .zoom-hint { color: var(--teal-dark); }
         .stage .stage-visual:hover .zoom-hint { opacity: 1; }
 
+        .info-hint {
+            position: absolute; bottom: 10px; left: 10px;
+            width: 28px; height: 28px; border-radius: 7px;
+            background: rgba(255,255,255,0.85); display: flex; align-items: center; justify-content: center;
+            font-size: 12px; opacity: 0; transition: opacity 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); pointer-events: none; z-index: 5;
+        }
+        .stage--init .info-hint { color: var(--coral); }
+        .stage--prim .info-hint { color: var(--green-dark); }
+        .stage--sec  .info-hint { color: var(--amber-dark); }
+        .stage--uni  .info-hint { color: #9B7DBF; }
+        .stage--ctrl .info-hint { color: var(--ctrl-dark); }
+        .stage--loop .info-hint { color: var(--teal-dark); }
+        .stage .stage-visual:hover .info-hint { opacity: 1; }
+
         .stage-label {
             font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 700;
-            padding: 5px 16px; border-radius: 50px; margin-bottom: 6px;
+            padding: 5px 16px; border-radius: 50px; margin-bottom: 8px;
             letter-spacing: 0.3px;
         }
         .stage--init .stage-label { background: var(--coral-soft); color: var(--coral); }
@@ -138,17 +153,12 @@
         .stage--ctrl .stage-label { background: var(--ctrl-soft); color: var(--ctrl-dark); }
         .stage--loop .stage-label { background: var(--teal-soft); color: var(--teal-dark); }
 
-        .stage-desc {
-            font-size: 11.5px; font-weight: 500; color: var(--muted); line-height: 1.4;
-            max-width: 200px;
-        }
+        .stage-desc { display: none; }
 
         .vacuum-pulse { animation: vacPulse 1.5s ease-in-out infinite; }
         @keyframes vacPulse { 0%,100%{opacity:.25;stroke-dashoffset:0} 50%{opacity:1;stroke-dashoffset:4} }
 
-        footer {
-            background: var(--dark); position: relative; z-index: 2;
-        }
+        footer { background: var(--dark); position: relative; z-index: 2; }
         .footer-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.06); }
         .footer-inner {
             max-width: 1200px; margin: 0 auto; padding: 24px 32px;
@@ -167,12 +177,11 @@
             font-size: 9px; color: white; font-weight: 900; font-family: 'Poppins', sans-serif;
         }
         .footer-left .footer-brand-name { font-family: 'Poppins', sans-serif; font-weight: 700; color: rgba(255,255,255,0.6); font-size: 13px; }
-        .footer-dev {
-            font-size: 11px; color: rgba(255,255,255,0.35); padding-left: 28px;
-        }
+        .footer-dev { font-size: 11px; color: rgba(255,255,255,0.35); padding-left: 28px; }
         .footer-right { font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 500; text-align: right; }
         .footer-right strong { color: rgba(255,255,255,0.65); font-weight: 700; }
 
+        /* ═══ MODALS ═══ */
         .modal-overlay {
             position:fixed;inset:0;background:rgba(45,42,38,.6);backdrop-filter:blur(8px);
             z-index:500;display:flex;align-items:center;justify-content:center;
@@ -199,6 +208,101 @@
             font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700;
             color: var(--dark); margin-bottom: 16px; padding-right: 44px;
         }
+
+        /* ═══ PID MODAL ═══ */
+        .pid-card {
+            background:white;border-radius:24px;max-width:640px;width:100%;padding:32px;
+            position:relative;transform:scale(.85) translateY(30px);
+            transition:transform .5s cubic-bezier(.23,1,.32,1);
+            box-shadow:0 30px 100px rgba(0,0,0,.25);max-height:90vh;overflow-y:auto;
+        }
+        .modal-overlay.open .pid-card{transform:scale(1) translateY(0)}
+        .pid-card h2 { font-family:'Poppins',sans-serif; font-size:20px; font-weight:800; color:var(--teal-dark); margin-bottom:4px; }
+        .pid-card .pid-subtitle { font-size:13px; color:var(--muted); margin-bottom:24px; line-height:1.5; }
+        .pid-section { margin-bottom:20px; padding:16px; border-radius:14px; background:var(--teal-soft); border-left:4px solid var(--teal); }
+        .pid-section h3 { font-family:'Poppins',sans-serif; font-size:15px; font-weight:700; color:var(--teal-dark); margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+        .pid-section h3 span { font-size:11px; font-weight:600; background:var(--teal); color:white; padding:2px 8px; border-radius:20px; }
+        .pid-section p { font-size:12.5px; line-height:1.6; color:var(--dark); margin-bottom:6px; }
+        .pid-section .analogia { font-size:11.5px; color:var(--teal-dark); font-style:italic; background:rgba(255,255,255,0.6); padding:8px 12px; border-radius:8px; margin-top:6px; }
+        .pid-table { width:100%; border-collapse:separate; border-spacing:0; margin:16px 0; border-radius:10px; overflow:hidden; font-size:12px; }
+        .pid-table th { background:var(--teal-dark); color:white; padding:10px 14px; text-align:left; font-family:'Poppins',sans-serif; font-weight:600; }
+        .pid-table td { padding:10px 14px; border-bottom:1px solid #e0f2f1; background:white; }
+        .pid-table tr:last-child td { border-bottom:none; }
+        .pid-app { background:linear-gradient(135deg,#E0F2F1,#B2DFDB); padding:16px; border-radius:14px; margin-top:20px; }
+        .pid-app h3 { font-family:'Poppins',sans-serif; font-size:14px; font-weight:700; color:var(--teal-dark); margin-bottom:8px; }
+        .pid-app p { font-size:12.5px; line-height:1.6; color:var(--dark); }
+        .pid-app ol { padding-left:20px; margin-top:8px; }
+        .pid-app li { font-size:12px; line-height:1.6; margin-bottom:4px; }
+
+        /* ═══ DESC FLOAT ═══ */
+        .desc-float {
+            position: fixed; z-index: 400;
+            background: white; border-radius: 18px;
+            padding: 20px 22px; max-width: 320px; width: 90vw;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.04);
+            opacity: 0; pointer-events: none;
+            transform: translateY(12px) scale(0.95);
+            transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .desc-float.visible {
+            opacity: 1; pointer-events: auto;
+            transform: translateY(0) scale(1);
+        }
+        .desc-float-label {
+            font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700;
+            margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+        }
+        .desc-float-label i { font-size: 14px; }
+        .desc-float-text {
+            font-size: 13px; font-weight: 500; line-height: 1.6; color: var(--muted);
+        }
+        .desc-float-close {
+            position: absolute; top: 10px; right: 10px; width: 24px; height: 24px;
+            border-radius: 50%; border: none; background: rgba(0,0,0,0.05);
+            color: var(--muted); font-size: 11px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .desc-float-close:hover { background: rgba(0,0,0,0.1); color: var(--dark); }
+        .desc-float-zoom {
+            display: inline-flex; align-items: center; gap: 5px;
+            margin-top: 12px; padding: 6px 14px; border-radius: 8px;
+            border: 1.5px solid currentColor; background: transparent;
+            font-family: 'Quicksand', sans-serif; font-size: 11px; font-weight: 700;
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .desc-float-zoom:hover { color: white !important; }
+
+        /* Color variants for float */
+        .desc-float--init { border-top: 4px solid var(--coral); }
+        .desc-float--init .desc-float-label { color: var(--coral); }
+        .desc-float--init .desc-float-zoom { color: var(--coral); }
+        .desc-float--init .desc-float-zoom:hover { background: var(--coral); }
+
+        .desc-float--prim { border-top: 4px solid var(--green-dark); }
+        .desc-float--prim .desc-float-label { color: var(--green-dark); }
+        .desc-float--prim .desc-float-zoom { color: var(--green-dark); }
+        .desc-float--prim .desc-float-zoom:hover { background: var(--green-dark); }
+
+        .desc-float--sec { border-top: 4px solid var(--amber-dark); }
+        .desc-float--sec .desc-float-label { color: var(--amber-dark); }
+        .desc-float--sec .desc-float-zoom { color: var(--amber-dark); }
+        .desc-float--sec .desc-float-zoom:hover { background: var(--amber-dark); }
+
+        .desc-float--uni { border-top: 4px solid #9B7DBF; }
+        .desc-float--uni .desc-float-label { color: #9B7DBF; }
+        .desc-float--uni .desc-float-zoom { color: #9B7DBF; }
+        .desc-float--uni .desc-float-zoom:hover { background: #9B7DBF; }
+
+        .desc-float--ctrl { border-top: 4px solid var(--ctrl-dark); }
+        .desc-float--ctrl .desc-float-label { color: var(--ctrl-dark); }
+        .desc-float--ctrl .desc-float-zoom { color: var(--ctrl-dark); }
+        .desc-float--ctrl .desc-float-zoom:hover { background: var(--ctrl-dark); }
+
+        .desc-float--loop { border-top: 4px solid var(--teal-dark); }
+        .desc-float--loop .desc-float-label { color: var(--teal-dark); }
+        .desc-float--loop .desc-float-zoom { color: var(--teal-dark); }
+        .desc-float--loop .desc-float-zoom:hover { background: var(--teal-dark); }
 
         .toast {
             position:fixed;bottom:28px;right:28px;background:var(--dark);color:white;
@@ -228,6 +332,8 @@
             .footer-left{align-items:center;}
             .footer-dev{padding-left:0;}
             .footer-right{text-align:center;}
+            .pid-card{padding:24px 18px;}
+            .desc-float{max-width:280px;padding:16px 18px;}
         }
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
     </style>
@@ -240,7 +346,7 @@
     <header class="poster-header">
         <div class="brand-top">
             <div class="brand-icon">A+</div>
-            <span class="brand-name">Aprende+ ©</span>
+            <span class="brand-name">Aprende+</span>
         </div>
         <h1 class="main-title"><span class="word-acompanamos">BRAZO ROBÓTICO</span><br>INDUSTRIAL</h1>
         <p class="subtitle">6 sistemas clave que lo componen</p>
@@ -250,7 +356,8 @@
 
         <!-- ═══ 1. VISTA GENERAL ═══ -->
         <article class="stage stage--init" role="listitem">
-            <div class="stage-visual" id="svg1" tabindex="0" role="button" aria-label="Ampliar diagrama de vista general">
+            <div class="stage-visual" id="svg1" tabindex="0" role="button" aria-label="Ver descripción">
+                <div class="info-hint"><i class="fas fa-info-circle"></i></div>
                 <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
                 <svg viewBox="0 0 420 400" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                     <line x1="10" y1="310" x2="410" y2="310" stroke="#FFB7B7" stroke-width="1"/>
@@ -340,12 +447,13 @@
                 </svg>
             </div>
             <span class="stage-label">Vista General</span>
-            <p class="stage-desc">Componentes y ejes del brazo robótico</p>
+            <p class="stage-desc">Define la estructura física. Los ejes articulan el movimiento desde la base fija hasta el efector final que interactúa con la pieza.</p>
         </article>
 
         <!-- ═══ 2. SISTEMA MECÁNICO ═══ -->
         <article class="stage stage--prim" role="listitem">
-            <div class="stage-visual" id="svg2" tabindex="0" role="button" aria-label="Ampliar diagrama del sistema mecánico">
+            <div class="stage-visual" id="svg2" tabindex="0" role="button" aria-label="Ver descripción">
+                <div class="info-hint"><i class="fas fa-info-circle"></i></div>
                 <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
                 <svg viewBox="0 0 300 310" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                     <line x1="10" y1="260" x2="290" y2="260" stroke="#B0E7C9" stroke-width="1"/>
@@ -394,12 +502,13 @@
                 </svg>
             </div>
             <span class="stage-label">Sistema Mecánico</span>
-            <p class="stage-desc">Base, articulaciones, eslabones y efector</p>
+            <p class="stage-desc">Transmite la fuerza y el movimiento. Los eslabones actúan como brazos rígidos y las articulaciones permiten rotar para alcanzar posiciones en el espacio.</p>
         </article>
 
         <!-- ═══ 3. SISTEMA DE SENSADO ═══ -->
         <article class="stage stage--sec" role="listitem">
-            <div class="stage-visual" id="svg3" tabindex="0" role="button" aria-label="Ampliar diagrama del sistema de sensado">
+            <div class="stage-visual" id="svg3" tabindex="0" role="button" aria-label="Ver descripción">
+                <div class="info-hint"><i class="fas fa-info-circle"></i></div>
                 <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
                 <svg viewBox="0 0 300 365" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                     <text x="150" y="18" text-anchor="middle" font-family="Poppins,sans-serif" font-size="9" font-weight="800" fill="#D4891A" letter-spacing="1.2">SISTEMA DE SENSADO</text>
@@ -462,12 +571,13 @@
                 </svg>
             </div>
             <span class="stage-label">Sistema de Sensado</span>
-            <p class="stage-desc">Cámaras, encoders y sensores de fuerza</p>
+            <p class="stage-desc">Permite percibir el entorno y su propio estado. Las cámaras ubican los objetos y los encoders miden la posición real de cada articulación.</p>
         </article>
 
         <!-- ═══ 4. SISTEMA DE ACTUACIÓN ═══ -->
         <article class="stage stage--uni" role="listitem">
-            <div class="stage-visual" id="svg4" tabindex="0" role="button" aria-label="Ampliar diagrama del sistema de actuación">
+            <div class="stage-visual" id="svg4" tabindex="0" role="button" aria-label="Ver descripción">
+                <div class="info-hint"><i class="fas fa-info-circle"></i></div>
                 <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
                 <svg viewBox="0 0 300 320" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                     <text x="150" y="18" text-anchor="middle" font-family="Poppins,sans-serif" font-size="9" font-weight="800" fill="#9B7DBF" letter-spacing="1.2">SISTEMA DE ACTUACIÓN</text>
@@ -519,12 +629,13 @@
                 </svg>
             </div>
             <span class="stage-label">Sistema de Actuación</span>
-            <p class="stage-desc">Motores, reductores y actuadores</p>
+            <p class="stage-desc">Genera el movimiento físico del robot. Los motores entregan la fuerza y los reductores la convierten en movimientos precisos y potentes.</p>
         </article>
 
         <!-- ═══ 5. SISTEMA DE CONTROL ═══ -->
         <article class="stage stage--ctrl" role="listitem">
-            <div class="stage-visual" id="svg5" tabindex="0" role="button" aria-label="Ampliar diagrama del sistema de control">
+            <div class="stage-visual" id="svg5" tabindex="0" role="button" aria-label="Ver descripción">
+                <div class="info-hint"><i class="fas fa-info-circle"></i></div>
                 <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
                 <svg viewBox="0 0 300 335" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                     <text x="150" y="18" text-anchor="middle" font-family="Poppins,sans-serif" font-size="9" font-weight="800" fill="#3A7BBF" letter-spacing="1.2">SISTEMA DE CONTROL</text>
@@ -578,12 +689,13 @@
                 </svg>
             </div>
             <span class="stage-label">Sistema de Control</span>
-            <p class="stage-desc">PLC, software y módulos electrónicos</p>
+            <p class="stage-desc">Es el cerebro que coordina todo. El PLC procesa las señales de los sensores y envía órdenes precisas a los actuadores en tiempo real.</p>
         </article>
 
         <!-- ═══ 6. ESQUEMA DE CONTROL EN LAZO CERRADO ═══ -->
         <article class="stage stage--loop" role="listitem">
-            <div class="stage-visual" id="svg6" tabindex="0" role="button" aria-label="Ampliar diagrama del esquema de control en lazo cerrado">
+            <div class="stage-visual" id="svg6" tabindex="0" role="button" aria-label="Ver descripción">
+                <div class="info-hint"><i class="fas fa-info-circle"></i></div>
                 <div class="zoom-hint"><i class="fas fa-search-plus"></i></div>
                 <svg viewBox="0 0 300 370" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                     <text x="150" y="16" text-anchor="middle" font-family="Poppins,sans-serif" font-size="8.5" font-weight="800" fill="#00897B" letter-spacing="1.2">ESQUEMA DE CONTROL</text>
@@ -603,7 +715,7 @@
                     <rect x="100" y="64" width="84" height="44" rx="4" fill="white" stroke="#4DB6AC" stroke-width=".9"/>
                     <text x="142" y="82" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">Control</text>
                     <text x="142" y="90" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">bajo nivel</text>
-                    <text x="142" y="101" text-anchor="middle" font-family="Poppins,sans-serif" font-size="3.5" font-weight="400" fill="#4DB6AC">PID por articulación</text>
+                    <text x="142" y="101" text-anchor="middle" font-family="Poppins,sans-serif" font-size="3.8" font-weight="700" fill="#00695C" style="cursor:pointer;text-decoration:underline" onclick="openPIDModal()">PID por articulación</text>
                     <line x1="192" y1="89" x2="208" y2="89" stroke="#00897B" stroke-width=".9"/>
                     <polygon points="206,86 212,89 206,92" fill="#00897B"/>
                     <rect x="192" y="74" width="22" height="9" rx="2" fill="rgba(224,242,241,.9)" stroke="#80CBC4" stroke-width=".3"/>
@@ -645,7 +757,7 @@
                     <circle cx="18" cy="276" r="6" fill="white" stroke="#4DB6AC" stroke-width=".6"/>
                     <text x="18" y="279" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5.5" font-weight="700" fill="#00897B">3</text>
                     <text x="30" y="275" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">Control bajo nivel</text>
-                    <text x="30" y="282" font-family="Poppins,sans-serif" font-size="4" font-weight="400" fill="#4DB6AC">Control PID de cada articulación (hombro, codo, muñeca)</text>
+                    <text x="30" y="282" font-family="Poppins,sans-serif" font-size="4" font-weight="700" fill="#00897B" style="cursor:pointer;text-decoration:underline" onclick="openPIDModal()">PID por articulación (clic para más)</text>
                     <circle cx="18" cy="298" r="6" fill="white" stroke="#4DB6AC" stroke-width=".6"/>
                     <text x="18" y="301" text-anchor="middle" font-family="Poppins,sans-serif" font-size="5.5" font-weight="700" fill="#00897B">4</text>
                     <text x="30" y="297" font-family="Poppins,sans-serif" font-size="5" font-weight="700" fill="#00695C">Entorno</text>
@@ -664,20 +776,20 @@
                 </svg>
             </div>
             <span class="stage-label">Esquema de Control</span>
-            <p class="stage-desc">Lazo cerrado aplicado al envasado de Yerba Mate</p>
+            <p class="stage-desc">Compara el objetivo con la realidad y corrige el error. Asegura que el brazo tome cada paquete de Yerba Mate con precisión milimétrica.</p>
         </article>
 
     </main>
 </div>
 
-<!-- ═══ FOOTER ═══ -->
+<!-- Footer -->
 <footer>
     <div class="footer-divider"></div>
     <div class="footer-inner">
         <div class="footer-left">
             <span class="footer-brand">
                 <span class="footer-brand-icon">A+</span>
-                <span class="footer-brand-name">Aprende+©</span>
+                <span class="footer-brand-name">Aprende+</span>
             </span>
             <span class="footer-dev">Desarrollado por Benitez Franco Pedro</span>
         </div>
@@ -687,7 +799,15 @@
     </div>
 </footer>
 
-<!-- ═══ MODAL ZOOM ═══ -->
+<!-- Desc Float -->
+<div class="desc-float" id="descFloat">
+    <button class="desc-float-close" onclick="closeDescFloat()" aria-label="Cerrar"><i class="fas fa-times"></i></button>
+    <div class="desc-float-label" id="descFloatLabel"></div>
+    <div class="desc-float-text" id="descFloatText"></div>
+    <button class="desc-float-zoom" id="descFloatZoom"><i class="fas fa-search-plus" style="font-size:10px;"></i> Ampliar diagrama</button>
+</div>
+
+<!-- Modal Zoom -->
 <div class="modal-overlay" id="zoomOverlay" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-card--zoom" id="zoomCard">
         <button class="modal-close" id="zoomClose" aria-label="Cerrar"><i class="fas fa-times"></i></button>
@@ -696,22 +816,73 @@
     </div>
 </div>
 
-<!-- ═══ TOAST ═══ -->
+<!-- Modal PID -->
+<div class="modal-overlay" id="pidOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="pid-card">
+        <button class="modal-close" onclick="closePIDModal()" aria-label="Cerrar"><i class="fas fa-times"></i></button>
+        <h2><i class="fas fa-cogs" style="margin-right:8px;font-size:18px;"></i>¿Qué es un PID por articulación?</h2>
+        <p class="pid-subtitle">Es el algoritmo matemático que usa el controlador para que cada articulación llegue exactamente a la posición deseada sin temblar ni pasarse.</p>
+        <div class="pid-section">
+            <h3>P — Proporcional <span>El presente</span></h3>
+            <p>Reacciona al <strong>error actual</strong>. Si la articulación está muy lejos del objetivo, el motor empuja con mucha fuerza. Si está cerca, empuja suave.</p>
+            <div class="analogia"><i class="fas fa-lightbulb" style="margin-right:6px;"></i>Analogía: Pisar el acelerador. Si estás a 100m del semáforo, aceleras fuerte; a 5m, levantas el pie.</div>
+            <p style="font-size:11px;color:#C04040;margin-top:6px;"><i class="fas fa-exclamation-triangle" style="margin-right:4px;"></i>Solo con "P": el brazo oscila sin llegar al punto exacto.</p>
+        </div>
+        <div class="pid-section">
+            <h3>I — Integral <span>El pasado</span></h3>
+            <p>Acumula el <strong>error del pasado</strong>. Si la articulación se quedó a 1° del objetivo por el peso, la "I" suma fuerza extra hasta llegar.</p>
+            <div class="analogia"><i class="fas fa-lightbulb" style="margin-right:6px;"></i>Analogía: Empujar una puerta pesada hasta que cierra del todo.</div>
+            <p style="font-size:11px;color:#C04040;margin-top:6px;"><i class="fas fa-exclamation-triangle" style="margin-right:4px;"></i>Solo con "I": el brazo se pasa del objetivo por reaccionar tarde.</p>
+        </div>
+        <div class="pid-section">
+            <h3>D — Derivativo <span>El futuro</span></h3>
+            <p>Predice el <strong>error futuro</strong>. Si viene muy rápido, la "D" frena antes para no pasarse del objetivo.</p>
+            <div class="analogia"><i class="fas fa-lightbulb" style="margin-right:6px;"></i>Analogía: El freno del auto. Frenas antes del semáforo si vienes rápido.</div>
+            <p style="font-size:11px;color:#C04040;margin-top:6px;"><i class="fas fa-exclamation-triangle" style="margin-right:4px;"></i>Solo con "D": el brazo se mueve demasiado lento.</p>
+        </div>
+        <h3 style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:var(--teal-dark);margin-bottom:10px;"><i class="fas fa-link" style="margin-right:6px;font-size:12px;"></i>¿Por qué "POR articulación"?</h3>
+        <table class="pid-table">
+            <thead><tr><th>Articulación</th><th>Característica</th><th>Ajuste PID</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Cintura</strong></td><td>Gira todo el peso</td><td>P fuerte, D alta</td></tr>
+                <tr><td><strong>Hombro</strong></td><td>Contra gravedad</td><td>I alta</td></tr>
+                <tr><td><strong>Codo</strong></td><td>Mueve el antebrazo</td><td>P media, D media</td></tr>
+                <tr><td><strong>Muñeca</strong></td><td>Muy ligera</td><td>P baja, rápida</td></tr>
+            </tbody>
+        </table>
+        <div class="pid-app">
+            <h3><i class="fas fa-box-open" style="margin-right:6px;font-size:13px;"></i>En la aplicación de Yerba Mate</h3>
+            <p>Cuando el PLC ordena: <em>"Muñeca a 45°"</em>, el PID hace:</p>
+            <ol>
+                <li><strong>P:</strong> Empuja el motor hacia 45°</li>
+                <li><strong>I:</strong> Si la gravedad frena en 44°, suma fuerza</li>
+                <li><strong>D:</strong> Frena antes de los 45° para no pasarse</li>
+            </ol>
+            <p style="margin-top:10px;font-weight:600;">Resultado: la garra toma el paquete de 500g con precisión milimétrica.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
 <div class="toast" id="toast" role="alert" aria-live="polite">
     <i class="fas fa-check-circle"></i>
     <span id="toastMsg"></span>
 </div>
 
 <script>
+    /* ═══ Data ═══ */
     var stageData = {
-        svg1: { title: 'Vista General — Componentes y Ejes' },
-        svg2: { title: 'Sistema Mecánico — Articulaciones y Eslabones' },
-        svg3: { title: 'Sistema de Sensado — Percepción del Robot' },
-        svg4: { title: 'Sistema de Actuación — Motores y Reductores' },
-        svg5: { title: 'Sistema de Control — PLC y Electrónica' },
-        svg6: { title: 'Esquema de Control — Lazo Cerrado (Envasado Yerba Mate)' }
+        svg1: { title: 'Vista General — Componentes y Ejes', label: 'Vista General', desc: 'Define la estructura física. Los ejes articulan el movimiento desde la base fija hasta el efector final que interactúa con la pieza.', variant: 'init' },
+        svg2: { title: 'Sistema Mecánico — Articulaciones y Eslabones', label: 'Sistema Mecánico', desc: 'Transmite la fuerza y el movimiento. Los eslabones actúan como brazos rígidos y las articulaciones permiten rotar para alcanzar posiciones en el espacio.', variant: 'prim' },
+        svg3: { title: 'Sistema de Sensado — Percepción del Robot', label: 'Sistema de Sensado', desc: 'Permite percibir el entorno y su propio estado. Las cámaras ubican los objetos y los encoders miden la posición real de cada articulación.', variant: 'sec' },
+        svg4: { title: 'Sistema de Actuación — Motores y Reductores', label: 'Sistema de Actuación', desc: 'Genera el movimiento físico del robot. Los motores entregan la fuerza y los reductores la convierten en movimientos precisos y potentes.', variant: 'uni' },
+        svg5: { title: 'Sistema de Control — PLC y Electrónica', label: 'Sistema de Control', desc: 'Es el cerebro que coordina todo. El PLC procesa las señales de los sensores y envía órdenes precisas a los actuadores en tiempo real.', variant: 'ctrl' },
+        svg6: { title: 'Esquema de Control — Lazo Cerrado (Envasado Yerba Mate)', label: 'Esquema de Control', desc: 'Compara el objetivo con la realidad y corrige el error. Asegura que el brazo tome cada paquete de Yerba Mate con precisión milimétrica.', variant: 'loop' }
     };
 
+    var icons = { init: 'fa-robot', prim: 'fa-gears', sec: 'fa-eye', uni: 'fa-bolt', ctrl: 'fa-microchip', loop: 'fa-rotate' };
+
+    /* ═══ Intersection Observer ═══ */
     var stages = document.querySelectorAll('.stage');
     var stageObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
@@ -724,6 +895,46 @@
     }, { threshold: 0.1 });
     stages.forEach(function(s) { stageObserver.observe(s); });
 
+    /* ═══ Desc Float ═══ */
+    var descFloat = document.getElementById('descFloat');
+    var descFloatLabel = document.getElementById('descFloatLabel');
+    var descFloatText = document.getElementById('descFloatText');
+    var descFloatZoom = document.getElementById('descFloatZoom');
+    var currentDescId = null;
+
+    function openDescFloat(id, event) {
+        var data = stageData[id];
+        if (!data) return;
+        currentDescId = id;
+
+        descFloat.className = 'desc-float desc-float--' + data.variant;
+        descFloatLabel.innerHTML = '<i class="fas ' + icons[data.variant] + '"></i> ' + data.label;
+        descFloatText.textContent = data.desc;
+
+        var rect = event.currentTarget.getBoundingClientRect();
+        var floatW = 300;
+        var left = rect.left + rect.width / 2 - floatW / 2;
+        if (left < 16) left = 16;
+        if (left + floatW > window.innerWidth - 16) left = window.innerWidth - floatW - 16;
+        var top = rect.bottom + 12;
+        if (top + 200 > window.innerHeight) top = rect.top - 12;
+
+        descFloat.style.left = left + 'px';
+        descFloat.style.top = top + 'px';
+        descFloat.style.width = floatW + 'px';
+        descFloat.classList.add('visible');
+    }
+
+    function closeDescFloat() {
+        descFloat.classList.remove('visible');
+        currentDescId = null;
+    }
+
+    descFloatZoom.addEventListener('click', function() {
+        if (currentDescId) { closeDescFloat(); openZoom(currentDescId); }
+    });
+
+    /* ═══ Zoom Modal ═══ */
     var zoomOverlay = document.getElementById('zoomOverlay');
     var zoomSvgWrapper = document.getElementById('zoomSvgWrapper');
     var zoomTitle = document.getElementById('zoomTitle');
@@ -733,14 +944,18 @@
         var svg = src.querySelector('svg');
         zoomSvgWrapper.innerHTML = '';
         var clone = svg.cloneNode(true);
-        clone.style.width = '100%';
-        clone.style.height = 'auto';
+        clone.style.width = '100%'; clone.style.height = 'auto';
+        /* Re-bind PID clicks in clone */
+        var pidTexts = clone.querySelectorAll('text[onclick]');
+        pidTexts.forEach(function(t) {
+            t.setAttribute('onclick', 'openPIDModal()');
+        });
         zoomSvgWrapper.appendChild(clone);
         zoomTitle.textContent = stageData[id].title;
         zoomOverlay.classList.add('open');
         zoomOverlay.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
-        showToast('Diagrama ampliado — usa scroll para ver detalles');
+        showToast('Diagrama ampliado — haz clic en "PID por articulación" para más info');
     }
 
     function closeZoom() {
@@ -749,31 +964,69 @@
         document.body.style.overflow = '';
     }
 
+    /* ═══ Click handlers on stage-visual ═══ */
     ['svg1','svg2','svg3','svg4','svg5','svg6'].forEach(function(id) {
         var el = document.getElementById(id);
-        el.addEventListener('click', function() { openZoom(id); });
+
+        el.addEventListener('click', function(e) {
+            /* If click on zoom-hint, open zoom directly */
+            if (e.target.closest('.zoom-hint')) {
+                closeDescFloat();
+                openZoom(id);
+                return;
+            }
+            /* Otherwise toggle desc float */
+            if (currentDescId === id && descFloat.classList.contains('visible')) {
+                closeDescFloat();
+            } else {
+                openDescFloat(id, e);
+            }
+        });
+
         el.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openZoom(id); }
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                var rect = el.getBoundingClientRect();
+                openDescFloat(id, { currentTarget: el, clientX: rect.left + rect.width/2, clientY: rect.bottom });
+            }
         });
     });
 
     document.getElementById('zoomClose').addEventListener('click', closeZoom);
     zoomOverlay.addEventListener('click', function(e) { if (e.target === zoomOverlay) closeZoom(); });
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeZoom(); });
 
+    /* ═══ PID Modal ═══ */
+    var pidOverlay = document.getElementById('pidOverlay');
+    function openPIDModal() {
+        pidOverlay.classList.add('open');
+        pidOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+    function closePIDModal() {
+        pidOverlay.classList.remove('open');
+        pidOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+    pidOverlay.addEventListener('click', function(e) { if (e.target === pidOverlay) closePIDModal(); });
+
+    /* ═══ Global close ═══ */
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeZoom(); closePIDModal(); closeDescFloat(); } });
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.stage-visual') && !e.target.closest('.desc-float')) { closeDescFloat(); }
+    });
+
+    /* ═══ Toast ═══ */
     var toastEl = document.getElementById('toast');
     var toastMsg = document.getElementById('toastMsg');
     var toastTimer = null;
-
     function showToast(msg) {
         toastMsg.textContent = msg;
         toastEl.classList.add('show');
         clearTimeout(toastTimer);
-        toastTimer = setTimeout(function() {
-            toastEl.classList.remove('show');
-        }, 3000);
+        toastTimer = setTimeout(function() { toastEl.classList.remove('show'); }, 3000);
     }
 
+    /* ═══ Particles ═══ */
     var pContainer = document.getElementById('particles');
     var pColors = ['#FF9A9E','#A8E6CF','#F5A623','#C4A8D8','#F7C948','#5B9BD5','#4DB6AC'];
     for (var i = 0; i < 18; i++) {
